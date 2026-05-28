@@ -2,8 +2,7 @@ package com.townHelper.service;
 
 import java.util.List;
 
-import com.townHelper.domain.HelpPostRequestDTO;
-import com.townHelper.domain.HelpPostResponseDTO;
+import com.townHelper.domain.HelpPostDTO;
 import com.townHelper.domain.HelpPostSummaryDTO;
 
 public interface HelpPostService {
@@ -12,11 +11,11 @@ public interface HelpPostService {
 	List<HelpPostSummaryDTO> getAllHelpPostsSummary();
 
 	// 도움 요청 게시글 단건 조회
-	HelpPostResponseDTO getHelpPostByNo(int helpPostNo);
+	HelpPostDTO getHelpPostByNo(int helpPostNo);
 
-	Integer setNewHelpPost(HelpPostRequestDTO newHelpPost);
+	Integer setNewHelpPost(HelpPostDTO newHelpPost);
 
-	void setEditHelpPost(HelpPostRequestDTO editHelpPost);
+	void setEditHelpPost(HelpPostDTO editHelpPost);
 
 	void setDeleteHelpPost(int helpPostNo);
 

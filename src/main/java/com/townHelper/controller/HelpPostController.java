@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.townHelper.domain.HelpPostRequestDTO;
-import com.townHelper.domain.HelpPostResponseDTO;
+import com.townHelper.domain.HelpPostDTO;
 import com.townHelper.domain.HelpPostSummaryDTO;
+import com.townHelper.service.CommentService;
 import com.townHelper.service.HelpPostService;
 
 @Controller
@@ -22,6 +22,9 @@ public class HelpPostController {
 	
 	@Autowired
 	HelpPostService helpPostService;
+	
+	@Autowired
+	CommentService commentService;	
 	
 	@GetMapping("/help-posts")
 	public String getHelpPosts(Model model) {
@@ -32,18 +35,18 @@ public class HelpPostController {
 	
 	@GetMapping("/help-posts/{helpPostNo}")
 	public String getHelpPostByNo(@PathVariable("helpPostNo") int helpPostNo, Model model) {
-		HelpPostResponseDTO helpPost = helpPostService.getHelpPostByNo(helpPostNo);
+		HelpPostDTO helpPost = helpPostService.getHelpPostByNo(helpPostNo);
 		model.addAttribute("helpPost", helpPost);
 		return "helpPost";
 	}
 	
 	@GetMapping("/help-posts/new")
-	public String getNewHelpPost(@ModelAttribute("newHelpPost") HelpPostRequestDTO newHelpPost) {
+	public String getNewHelpPost(@ModelAttribute("newHelpPost") HelpPostDTO newHelpPost) {
 		return "newHelpPost";
 	}
 	
 	@PostMapping("/help-posts")
-	public String submitNewHelpPost(@ModelAttribute("newHelpPost") HelpPostRequestDTO newHelpPost) {
+	public String submitNewHelpPost(@ModelAttribute("newHelpPost") HelpPostDTO newHelpPost) {
 		
 		// 임시 작성자
 		newHelpPost.setUserNo(1);
@@ -53,13 +56,13 @@ public class HelpPostController {
 	
 	@GetMapping("/help-posts/{helpPostNo}/edit")
 	public String getEditHelpPost(@PathVariable("helpPostNo") int helpPostNo, Model model) {
-		HelpPostResponseDTO helpPost = helpPostService.getHelpPostByNo(helpPostNo);
-		model.addAttribute("helpPost", helpPost);
+		HelpPostDTO helpPost = helpPostService.getHelpPostByNo(helpPostNo);
+		model.addAttribute("editHelpPost", helpPost);
 		return "editHelpPost";
 	}
 	
 	@PutMapping("/help-posts/{helpPostNo}")
-	public String submitEditHelpPost(@ModelAttribute("editHelpPost") HelpPostRequestDTO editHelpPost) {
+	public String submitEditHelpPost(@ModelAttribute("editHelpPost") HelpPostDTO editHelpPost) {
 		helpPostService.setEditHelpPost(editHelpPost);
 		return "redirect:/help-posts/" + editHelpPost.getHelpPostNo();
 	}

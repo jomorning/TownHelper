@@ -3,7 +3,7 @@ package com.townHelper.domain;
 import java.time.LocalDateTime;
 
 // 게시글 단건 조회용
-public class HelpPostResponseDTO {
+public class HelpPostDTO {
 
 	private int helpPostNo;
 	private int userNo;
@@ -25,7 +25,7 @@ public class HelpPostResponseDTO {
 	private LocalDateTime postUpdatedAt;
 	private boolean isDeleted;
 
-	public HelpPostResponseDTO() {
+	public HelpPostDTO() {
 	}
 
 	public int getHelpPostNo() {

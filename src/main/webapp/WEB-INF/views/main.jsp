@@ -20,7 +20,7 @@
 
     <nav class="top-nav">
       <a href="#">도움 찾기</a>
-      <a href="#">요청하기</a>
+      <a href="${main}help-posts/new">요청하기</a>
       <a href="#">관심글</a>
       <a href="${main}users/{userNo}">마이페이지</a>
       <a href="${main}login">로그인</a>

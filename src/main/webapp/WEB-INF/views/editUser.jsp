@@ -34,10 +34,16 @@
 			<label>이름</label>
 			<form:input path="userName" />
 		</div>
+		
+		<div>
+			<label>성별</label>
+			<form:input path="userGender" readonly="true"/>
+		</div>
 
-		${editUser.userGender}<br>
-
-		${editUser.userBirth}<br>
+		<div>
+			<label>생년월일</label>
+			<form:input path="userBirth" readonly="true"/>
+		</div>
 
 		<div>
 			<label>구</label>

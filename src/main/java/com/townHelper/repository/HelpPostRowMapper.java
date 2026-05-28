@@ -5,16 +5,16 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.townHelper.domain.HelpPostResponseDTO;
+import com.townHelper.domain.HelpPostDTO;
 
-public class HelpPostResponseRowMapper implements RowMapper<HelpPostResponseDTO> {
+public class HelpPostRowMapper implements RowMapper<HelpPostDTO> {
 
 	@Override
-	public HelpPostResponseDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		HelpPostResponseDTO post = new HelpPostResponseDTO();
+	public HelpPostDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		HelpPostDTO post = new HelpPostDTO();
 		post.setHelpPostNo(rs.getInt("help_post_no"));
 		post.setUserNo(rs.getInt("user_no"));
-		post.setUserId(rs.getString("user_id"));
+		// post.setUserId(rs.getString("user_id"));
 		post.setHelpCategory(rs.getString("help_category"));
 		post.setPostAddrGu(rs.getString("post_addr_gu"));
 		post.setPostAddrDong(rs.getString("post_addr_dong"));
@@ -29,7 +29,11 @@ public class HelpPostResponseRowMapper implements RowMapper<HelpPostResponseDTO>
 		post.setRequestTime(rs.getTimestamp("request_time").toLocalDateTime());
 		post.setPostStatus(rs.getString("post_status"));
 		post.setPostCreatedAt(rs.getTimestamp("post_created_at").toLocalDateTime());
-		post.setPostUpdatedAt(rs.getTimestamp("post_updated_at").toLocalDateTime());
+
+		if (rs.getTimestamp("post_updated_at") != null) {
+			post.setPostUpdatedAt(rs.getTimestamp("post_updated_at").toLocalDateTime());
+		}
+		
 		post.setDeleted(rs.getBoolean("is_deleted"));
 		return post;
 	}

@@ -27,13 +27,6 @@ public class CommentRepositoryImpl implements CommentRepository {
 	}
 
 	@Override
-	public CommentResponseDTO getCommentByUserNo(int userNo) {
-		String SQL = "SELECT * FROM comment WHERE user_no = ? AND is_deleted = FALSE";
-		CommentResponseDTO comment = template.queryForObject(SQL, new CommentResponseRowMapper(), userNo); 
-		return comment;
-	}
-
-	@Override
 	public void setNewComment(CommentRequestDTO newComment) {
 		String SQL = "INSERT INTO comment(user_no, help_post_no, comment_content) VALUES(?,?,?)";
 		template.update(SQL, newComment.getUserNo(), newComment.getHelpPostNo(), newComment.getCommentContent());
