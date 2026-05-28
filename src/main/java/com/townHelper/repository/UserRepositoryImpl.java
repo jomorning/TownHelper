@@ -37,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public UserDTO getUserByNo(int userNo) {
-		String SQL = "SELECT * FROM user";
+		String SQL = "SELECT * FROM user WHERE user_no = ?";
 		UserDTO user = template.queryForObject(SQL, new UserRowMapper(), userNo);
 		return user;
 	}

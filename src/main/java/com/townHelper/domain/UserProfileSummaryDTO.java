@@ -1,5 +1,6 @@
 package com.townHelper.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 // 타 사용자 계정 조회용, 관리자 조회용
@@ -8,6 +9,7 @@ public class UserProfileSummaryDTO {
 	private int userNo;
 	private String userId;
 	private String userGender;
+	private LocalDate userBirth;
 	private int userAge;
 	private String userAddrGu;
 	private String userAddrDong;
@@ -44,6 +46,14 @@ public class UserProfileSummaryDTO {
 
 	public void setUserGender(String userGender) {
 		this.userGender = userGender;
+	}
+
+	public LocalDate getUserBirth() {
+		return userBirth;
+	}
+
+	public void setUserBirth(LocalDate userBirth) {
+		this.userBirth = userBirth;
 	}
 
 	public int getUserAge() {

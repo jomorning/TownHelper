@@ -15,7 +15,7 @@ public class UserProfileSummaryRowMapper implements RowMapper<UserProfileSummary
 		user.setUserNo(rs.getInt("user_no"));
 		user.setUserId(rs.getString("user_id"));
 		user.setUserGender(rs.getString("user_gender"));
-		user.setUserAge(rs.getInt("user_age"));
+		user.setUserBirth(rs.getDate("user_birth").toLocalDate());
 		user.setUserAddrGu(rs.getString("user_addr_gu"));
 		user.setUserAddrDong(rs.getString("user_addr_dong"));
 		user.setUserSkill(rs.getString("user_skill"));

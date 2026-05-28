@@ -2,6 +2,8 @@ package com.townHelper.domain;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
 // 회원 가입용, 회원 정보 수정용
 public class UserDTO {
 	
@@ -17,6 +19,8 @@ public class UserDTO {
 	private String userRole;
 	private String profileImgName;
 	private String profileImgPath;
+	
+	private MultipartFile profileImgFile;
 	
 	public UserDTO() {
 	}
@@ -115,6 +119,14 @@ public class UserDTO {
 
 	public void setProfileImgPath(String profileImgPath) {
 		this.profileImgPath = profileImgPath;
+	}
+
+	public MultipartFile getProfileImgFile() {
+		return profileImgFile;
+	}
+
+	public void setProfileImgFile(MultipartFile profileImgFile) {
+		this.profileImgFile = profileImgFile;
 	}
 
 }

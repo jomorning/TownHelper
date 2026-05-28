@@ -29,18 +29,22 @@ public class HelpPostRepositoryImpl implements HelpPostRepository {
 
 	@Override
 	public HelpPostResponseDTO getHelpPostByNo(int helpPostNo) {
-		String SQL = "SELECT * FROM help_post WHERE help_post_no = ? AND is_deleted = FALSE";
+		String SQL = "SELECT * FROM help_post WHERE help_post_no = ? AND is_deleted = 'FALSE'";
 		HelpPostResponseDTO helpPost = template.queryForObject(SQL, new HelpPostResponseRowMapper(), helpPostNo);
 		return helpPost;
 	}
 
 	@Override
-	public void setNewHelpPost(HelpPostRequestDTO newHelpPost) {
-		String SQL = "INSERT INTO help_post(user_no, help_category, post_addr_gu, post_addr_dong, post_title, post_content, expected_pay, expected_helper_count, wanted_skill, request_time, post_status) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+	public Integer setNewHelpPost(HelpPostRequestDTO newHelpPost) {
+		String SQL = "INSERT INTO help_post(user_no, help_category, post_addr_gu, post_addr_dong, post_title, post_content, expected_pay, expected_helper_count, wanted_skill, request_time) VALUES(?,?,?,?,?,?,?,?,?,?)";
 		template.update(SQL, newHelpPost.getUserNo(), newHelpPost.getHelpCategory(), newHelpPost.getPostAddrGu(),
 				newHelpPost.getPostAddrDong(), newHelpPost.getPostTitle(), newHelpPost.getPostContent(),
 				newHelpPost.getExpectedPay(), newHelpPost.getExpectedHelperCount(), newHelpPost.getWantedSkill(),
-				newHelpPost.getRequestTime(), newHelpPost.getPostStatus());
+				newHelpPost.getRequestTime());
+		String SQL_return =  "SELECT LAST_INSERT_ID()";
+		Integer returnedPK = template.queryForObject(SQL_return, Integer.class);
+		return returnedPK;
+		
 	}
 
 	@Override

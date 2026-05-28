@@ -7,15 +7,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 가입</title>
+<title>사용자 정보 수정</title>
 </head>
 <body>
 
-	<h2>회원 가입</h2>
+	<img src="<c:url value='/upload/user/${editUser.profileImgName}'/>"
+		style="width: 20%" />
+	<br>
 
-	<c:url value="/users" var="submitRegister" />
-	<form:form modelAttribute="newUser" action="${submitRegister}"
-		enctype="multipart/form-data">
+	<h2>사용자 정보 수정</h2>
+
+	<c:url value="/users/${editUser.userNo}" var="submitEditUser"/>
+	<form:form modelAttribute="editUser" action="${submitEditUser}" method="PUT" enctype="multipart/form-data">
 
 		<div>
 			<label>아이디</label>
@@ -32,19 +35,9 @@
 			<form:input path="userName" />
 		</div>
 
-		<div>
-			<label>성별</label>
-			<form:select path="userGender">
-				<form:option value="">선택</form:option>
-				<form:option value="MALE">남성</form:option>
-				<form:option value="FEMALE">여성</form:option>
-			</form:select>
-		</div>
+		${editUser.userGender}<br>
 
-		<div>
-			<label>생년월일</label>
-			<form:input type="date" path="userBirth" />
-		</div>
+		${editUser.userBirth}<br>
 
 		<div>
 			<label>구</label>
@@ -66,8 +59,9 @@
 			<form:input type="file" path="profileImgFile" />
 		</div>
 
-		<button>회원가입</button>
+		<button>수정</button>
 		<button type="reset">초기화</button>
 	</form:form>
+
 </body>
 </html>
