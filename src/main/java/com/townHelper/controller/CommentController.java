@@ -5,37 +5,39 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.townHelper.domain.CommentRequestDTO;
-import com.townHelper.domain.CommentResponseDTO;
+import com.townHelper.domain.CommentDTO;
 import com.townHelper.service.CommentService;
 
 @Controller
 public class CommentController {
-	
-	@Autowired
-	private ObjectMapper objectMapper;
-	
+
 	@Autowired
 	CommentService commentService;
 	
 	@GetMapping("/help-posts/{helpPostNo}/comments")
 	@ResponseBody
-	public String getAllCommentsByPost(@ModelAttribute("newComment") CommentRequestDTO newComment, @PathVariable("helpPostNo") int helpPostNo) {
-		List<CommentResponseDTO> commentList = commentService.getAllCommentsByPost(helpPostNo);
+	public List<CommentDTO> getAllCommentsByPost(@PathVariable("helpPostNo") int helpPostNo) {
+		List<CommentDTO> commentList = commentService.getAllCommentsByPost(helpPostNo);
+		return commentList;
+	}
+	
+	@PostMapping("/help-posts/{helpPostNo}/comments")
+	@ResponseBody
+	public CommentDTO submitNewComment(@RequestBody CommentDTO newComment, @PathVariable("helpPostNo") int helpPostNo) {
 		
-		String json = null;
-		try {
-			json = objectMapper.writeValueAsString(commentList);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return json;
+		// 임시
+		newComment.setUserNo(1);
+
+		System.out.println("게시글 번호: " + newComment.getHelpPostNo());
+		
+		Integer returnedPK = commentService.setNewComment(newComment);
+		CommentDTO comment = commentService.getReturnedNewComment(returnedPK);
+		return comment;
 	}
 
 }

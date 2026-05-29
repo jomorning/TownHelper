@@ -2,17 +2,19 @@ package com.townHelper.service;
 
 import java.util.List;
 
-import com.townHelper.domain.CommentRequestDTO;
-import com.townHelper.domain.CommentResponseDTO;
+import com.townHelper.domain.CommentDTO;
 
 public interface CommentService {
 
 	// 게시글당 댓글 목록 조회
-	List<CommentResponseDTO> getAllCommentsByPost(int helpPostNo);
+	List<CommentDTO> getAllCommentsByPost(int helpPostNo);
+	
+	// 작성한 새 댓글 가져오기 (AJAX)
+	CommentDTO getReturnedNewComment(int commentNo);
 
-	void setNewComment(CommentRequestDTO newComment);
+	Integer setNewComment(CommentDTO newComment);
 
-	void setEditComment(CommentRequestDTO editComment);
+	void setEditComment(CommentDTO editComment);
 
 	void setDeleteComment(int commentNo);
 

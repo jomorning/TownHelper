@@ -2,17 +2,18 @@ package com.townHelper.domain;
 
 import java.time.LocalDateTime;
 
-public class CommentResponseDTO {
+public class CommentDTO {
 
 	private int commentNo;
 	private int userNo;
 	private String userId;
+	private int helpPostNo;
 	private String commentContent;
 	private LocalDateTime commentCreatedAt;
 	private LocalDateTime commentUpdatedAt;
 	private boolean isDeleted;
 
-	public CommentResponseDTO() {
+	public CommentDTO() {
 	}
 
 	public int getCommentNo() {
@@ -37,6 +38,14 @@ public class CommentResponseDTO {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public int getHelpPostNo() {
+		return helpPostNo;
+	}
+
+	public void setHelpPostNo(int helpPostNo) {
+		this.helpPostNo = helpPostNo;
 	}
 
 	public String getCommentContent() {

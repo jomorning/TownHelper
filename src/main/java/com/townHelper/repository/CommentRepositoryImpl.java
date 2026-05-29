@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.townHelper.domain.CommentRequestDTO;
-import com.townHelper.domain.CommentResponseDTO;
+import com.townHelper.domain.CommentDTO;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
@@ -20,20 +19,30 @@ public class CommentRepositoryImpl implements CommentRepository {
 	}
 
 	@Override
-	public List<CommentResponseDTO> getAllCommentsByPost(int helpPostNo) {
-		String SQL = "SELECT * FROM comment WHERE help_post_no = ? AND is_deleted = FALSE ORDER BY comment_created_at ASC";
-		List<CommentResponseDTO> commentList = template.query(SQL, new CommentResponseRowMapper(), helpPostNo);
+	public List<CommentDTO> getAllCommentsByPost(int helpPostNo) {
+		String SQL = "SELECT comment.comment_no, comment.user_no, user.user_id, comment.help_post_no, comment.comment_content, comment.comment_created_at, comment.comment_updated_at, comment.is_deleted FROM comment JOIN user ON comment.user_no = user.user_no WHERE help_post_no = ? AND comment.is_deleted = 'FALSE' ORDER BY comment_created_at ASC";
+		List<CommentDTO> commentList = template.query(SQL, new CommentRowMapper(), helpPostNo);
 		return commentList;				
 	}
 
 	@Override
-	public void setNewComment(CommentRequestDTO newComment) {
-		String SQL = "INSERT INTO comment(user_no, help_post_no, comment_content) VALUES(?,?,?)";
-		template.update(SQL, newComment.getUserNo(), newComment.getHelpPostNo(), newComment.getCommentContent());
+	public CommentDTO getReturnedNewComment(int commentNo) {
+		String SQL = "SELECT comment.comment_no, comment.user_no, user.user_id, comment.help_post_no, comment.comment_content, comment.comment_created_at, comment.comment_updated_at, comment.is_deleted FROM comment JOIN user ON comment.user_no = user.user_no WHERE comment_no = ? AND comment.is_deleted = 'FALSE'";
+		CommentDTO comment = template.queryForObject(SQL, new CommentRowMapper(), commentNo);
+		return comment;
 	}
 
 	@Override
-	public void setEditComment(CommentRequestDTO editComment) {
+	public Integer setNewComment(CommentDTO newComment) {
+		String SQL = "INSERT INTO comment(user_no, help_post_no, comment_content) VALUES(?,?,?)";
+		template.update(SQL, newComment.getUserNo(), newComment.getHelpPostNo(), newComment.getCommentContent());
+		String SQL_return =  "SELECT LAST_INSERT_ID()";
+		Integer returnedPK = template.queryForObject(SQL_return, Integer.class);
+		return returnedPK;
+	}
+
+	@Override
+	public void setEditComment(CommentDTO editComment) {
 		String SQL = "UPDATE comment SET comment_content = ? WHERE comment_no = ?";
 		template.update(SQL, editComment.getCommentContent(), editComment.getCommentNo());
 	}

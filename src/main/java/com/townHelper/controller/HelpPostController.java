@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import com.townHelper.domain.CommentDTO;
 import com.townHelper.domain.HelpPostDTO;
 import com.townHelper.domain.HelpPostSummaryDTO;
 import com.townHelper.service.CommentService;
@@ -36,7 +37,9 @@ public class HelpPostController {
 	@GetMapping("/help-posts/{helpPostNo}")
 	public String getHelpPostByNo(@PathVariable("helpPostNo") int helpPostNo, Model model) {
 		HelpPostDTO helpPost = helpPostService.getHelpPostByNo(helpPostNo);
+		List<CommentDTO> commentList = commentService.getAllCommentsByPost(helpPostNo);
 		model.addAttribute("helpPost", helpPost);
+		model.addAttribute("commentList", commentList);
 		return "helpPost";
 	}
 	

@@ -27,34 +27,46 @@
 	게시글 수정: ${helpPost.postUpdatedAt}<br>
 	게시글 신고 상태: ${helpPost.deleted}<br>
 	
-	<input type="hidden" id="helpPostNo" value="${helpPost.helpPostNo}">
-	<c:url value="/help-posts/${helpPost.helpPostNo}/comments" var="getAllCommentsByPost"/>
+	<hr>
 	
+	<form>
+		<button type="button">도우미 지원</button>
+	</form>
+	
+	<hr>
+	
+	<form>
+		<input type="text" id="commentContent" placeholder="댓글을 입력하세요">
+		<button type="button" id="btn">댓글 등록</button>
+	</form>
+	
+	<div id="newCommentArea"></div>
+	
+	<c:url value='/help-posts/${helpPost.helpPostNo}/comments' var="submitNewComment"/>
 	<script>
-	
-	const helpPostNo = document.getElementById("helpPostNo");
-	
-	function loadComments(helpPostNo) {
-		$.ajax({
-			url: "${getAllCommentsByPost}",
-			type: "GET",
-			data: {
-				helpPostNo: helpPostNo,
-				commentContent: $("#commentContent").val()
-			},
-			success: function (comments) {
-				$("#commentList").empty();
-
-				comments.forEach(function (comment) {
-					appendComment(comment);
-				});
-			}
+		const btn = document.getElementById("btn");
+		const commentContent = document.getElementById("commentContent");
+		const newCommentArea = document.getElementById("newCommentArea");
+		
+		btn.addEventListener("click", function() {
+			$.ajax({
+				url: "${submitNewComment}",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({
+					helpPostNo: ${helpPost.helpPostNo},
+					commentContent: commentContent.value
+				}),
+				
+				success:function(newComment) {
+					newCommentArea.innerHTML = newCommentArea.innerHTML
+											 + newComment.userId + "<br>" 
+											 + newComment.commentContent + "<br>"
+											 + newComment.commentCreatedAt + "<br>" 
+											 + newComment.commentUpdatedAt + "<br>";
+				}
+			});
 		});
-	}
-	
-	
-	
-	
 	</script>
 </body>
 </html>
