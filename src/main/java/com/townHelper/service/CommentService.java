@@ -9,8 +9,8 @@ public interface CommentService {
 	// 게시글당 댓글 목록 조회
 	List<CommentDTO> getAllCommentsByPost(int helpPostNo);
 	
-	// 작성한 새 댓글 가져오기 (AJAX)
-	CommentDTO getReturnedNewComment(int commentNo);
+	// 댓글 단건 조회 (AJAX)
+	CommentDTO getCommentByNo(int commentNo);
 
 	Integer setNewComment(CommentDTO newComment);
 

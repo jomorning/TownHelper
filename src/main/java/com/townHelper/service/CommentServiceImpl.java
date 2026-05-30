@@ -21,8 +21,8 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public CommentDTO getReturnedNewComment(int commentNo) {
-		CommentDTO comment = commentRepository.getReturnedNewComment(commentNo);
+	public CommentDTO getCommentByNo(int commentNo) {
+		CommentDTO comment = commentRepository.getCommentByNo(commentNo);
 		return comment;
 	}
 

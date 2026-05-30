@@ -26,7 +26,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 	}
 
 	@Override
-	public CommentDTO getReturnedNewComment(int commentNo) {
+	public CommentDTO getCommentByNo(int commentNo) {
 		String SQL = "SELECT comment.comment_no, comment.user_no, user.user_id, comment.help_post_no, comment.comment_content, comment.comment_created_at, comment.comment_updated_at, comment.is_deleted FROM comment JOIN user ON comment.user_no = user.user_no WHERE comment_no = ? AND comment.is_deleted = 'FALSE'";
 		CommentDTO comment = template.queryForObject(SQL, new CommentRowMapper(), commentNo);
 		return comment;
@@ -49,7 +49,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
 	@Override
 	public void setDeleteComment(int commentNo) {
-		String SQL = "UPDATE comment SET is_deleted = TRUE WHERE comment_no = ?";
+		String SQL = "DELETE FROM comment WHERE comment_no = ?";
 		template.update(SQL, commentNo);
 	}
 
