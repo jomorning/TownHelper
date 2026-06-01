@@ -8,66 +8,101 @@
 <head>
 <meta charset="UTF-8">
 <title>사용자 정보 수정</title>
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/main.css">
 </head>
 <body>
 
-	<img src="<c:url value='/upload/user/${editUser.profileImgName}'/>"
-		style="width: 20%" />
-	<br>
+<header class="top-header">
+	<div class="container header-inner">
+		<c:url value="/" var="main" />
 
-	<h2>사용자 정보 수정</h2>
+		<h1 class="logo">
+			<a href="${main}">TownHelper</a>
+		</h1>
+	</div>
+</header>
 
-	<c:url value="/users/${editUser.userNo}" var="submitEditUser"/>
-	<form:form modelAttribute="editUser" action="${submitEditUser}" method="PUT" enctype="multipart/form-data">
+<main class="page-area">
+	<div class="container">
 
-		<div>
-			<label>아이디</label>
-			<form:input path="userId" />
+		<div class="page-title">
+			<h2>사용자 정보 수정</h2>
 		</div>
 
-		<div>
-			<label>비밀번호</label>
-			<form:password path="userPw" />
+		<div class="content-panel">
+
+			<img src="<c:url value='/upload/user/${editUser.profileImgName}'/>"
+				style="width: 20%" />
+
+			<c:url value="/users/${editUser.userNo}" var="submitEditUser" />
+
+			<form:form modelAttribute="editUser"
+				action="${submitEditUser}"
+				method="PUT"
+				enctype="multipart/form-data">
+
+				<div class="form-grid">
+
+					<div class="form-row">
+						<label>아이디</label>
+						<form:input path="userId" />
+					</div>
+
+					<div class="form-row">
+						<label>비밀번호</label>
+						<form:password path="userPw" />
+					</div>
+
+					<div class="info-list">
+
+						<div class="info-item">
+							<span>이름</span>
+							<strong>${editUser.userName}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>성별</span>
+							<strong>${editUser.userGender}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>생년월일</span>
+							<strong>${editUser.userBirth}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>주소</span>
+							<strong>${editUser.userAddrGu} ${editUser.userAddrDong}</strong>
+						</div>
+
+					</div>
+
+					<div class="form-row">
+						<label>나만의 스킬</label>
+						<form:input path="userSkill"
+							placeholder="예: 과외 잘 할 자신 있습니다" />
+					</div>
+
+					<div class="form-row">
+						<label>프로필 이미지</label>
+						<form:input type="file" path="profileImgFile" />
+					</div>
+
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="btn-blue">수정</button>
+					<button type="reset" class="btn-light">초기화</button>
+				</div>
+
+			</form:form>
+
 		</div>
 
-		<div>
-			<label>이름</label>
-			<form:input path="userName" />
-		</div>
-		
-		<div>
-			<label>성별</label>
-			<form:input path="userGender" readonly="true"/>
-		</div>
-
-		<div>
-			<label>생년월일</label>
-			<form:input path="userBirth" readonly="true"/>
-		</div>
-
-		<div>
-			<label>구</label>
-			<form:input path="userAddrGu" placeholder="예: 진해구" />
-		</div>
-
-		<div>
-			<label>동</label>
-			<form:input path="userAddrDong" placeholder="예: 석동" />
-		</div>
-
-		<div>
-			<label>나만의 스킬</label>
-			<form:input path="userSkill" placeholder="예: 과외 잘 할 자신 있습니다" />
-		</div>
-
-		<div>
-			<label>프로필 이미지</label>
-			<form:input type="file" path="profileImgFile" />
-		</div>
-
-		<button>수정</button>
-		<button type="reset">초기화</button>
-	</form:form>
+	</div>
+</main>
 
 </body>
 </html>

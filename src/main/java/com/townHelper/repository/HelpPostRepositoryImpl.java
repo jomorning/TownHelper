@@ -21,7 +21,7 @@ public class HelpPostRepositoryImpl implements HelpPostRepository {
 
 	@Override
 	public List<HelpPostSummaryDTO> getAllHelpPostsSummary() {
-		String SQL = "SELECT * FROM help_post WHERE is_deleted = FALSE ORDER BY post_created_at DESC";
+		String SQL = "SELECT help_post.help_post_no, help_post.user_no, user.user_id, help_post.help_category, help_post.post_addr_gu, help_post.post_addr_dong, help_post.post_title, help_post.post_content, help_post.expected_pay, help_post.final_pay, help_post.expected_helper_count, help_post.applied_helper_count, help_post.accepted_helper_count, help_post.wanted_skill, help_post.request_time, help_post.post_status, help_post.post_created_at, help_post.post_updated_at, help_post.is_deleted FROM help_post JOIN user ON help_post.user_no = user.user_no WHERE help_post.is_deleted = 'FALSE' ORDER BY help_post.post_created_at DESC;";
 		List<HelpPostSummaryDTO> helpPostList = template.query(SQL, new HelpPostSummaryRowMapper());
 		return helpPostList;
 	}
@@ -56,7 +56,7 @@ public class HelpPostRepositoryImpl implements HelpPostRepository {
 
 	@Override
 	public void setDeleteHelpPost(int helpPostNo) {
-		String SQL = "UPDATE help_post SET is_deleted = TRUE WHERE help_post_no=?";
+		String SQL = "DELETE FROM help_post WHERE help_post_no=?";
 		template.update(SQL, helpPostNo);
 	}
 

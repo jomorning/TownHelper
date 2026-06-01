@@ -7,58 +7,188 @@
 <head>
 <meta charset="UTF-8">
 <title>게시글 조회</title>
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/main.css">
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
+
 <body>
-	요청 상태: ${helpPost.postStatus}
-	<br> 작성자 : ${helpPost.userId}
-	<br> 도움 카테고리: ${helpPost.helpCategory}
-	<br> 도움 요청 지역: ${helpPost.postAddrGu} ${helpPost.postAddrDong}
-	<br> 제목: ${helpPost.postTitle}
-	<br> 본문: ${helpPost.postContent}
-	<br> 예상 보수: ${helpPost.expectedPay}
-	<br> 확정 보수: ${helpPost.finalPay}
-	<br> 예상 도우미 인원: ${helpPost.expectedHelperCount}
-	<br> 지원 도우미 인원: ${helpPost.appliedHelperCount}
-	<br> 수락 도우미 인원: ${helpPost.acceptedHelperCount}
-	<br> 원하는 도우미 스킬: ${helpPost.wantedSkill}
-	<br> 도움 시간: ${helpPost.requestTime}
-	<br> 게시글 생성: ${helpPost.postCreatedAt}
-	<br> 게시글 수정: ${helpPost.postUpdatedAt}
-	<br> 게시글 신고 상태: ${helpPost.deleted}
-	<br>
 
-	<hr>
+	<header class="top-header">
+		<div class="container header-inner">
 
-	<form>
-		<button type="button">도우미 지원</button>
-	</form>
+			<c:url value="/" var="main" />
 
-	<hr>
+			<h1 class="logo">
+				<a href="${main}">TownHelper</a>
+			</h1>
 
-	<div id="commentArea">
-		<c:forEach var="comment" items="${commentList}">
-			<div data-comment-no="${comment.commentNo}">
-				${comment.userId}<br> <span class="commentContent">${comment.commentContent}</span><br>
+			<nav class="top-nav">
+				<a href="#">도움 찾기</a> <a href="${main}help-posts/new">요청하기</a> <a
+					href="#">관심글</a> <a href="${main}users/{userNo}">마이페이지</a> <a
+					href="${main}login">로그인</a> <a href="${main}users/register"
+					class="join-btn">회원가입</a>
+			</nav>
 
-				${comment.commentCreatedAt}<br> <span class="commentUpdatedAt">
-					${comment.commentUpdatedAt} </span><br>
+		</div>
+	</header>
 
-				<button type="button" id="editCommentBtn">수정</button>
-				<button type="button" id="deleteCommentBtn">삭제</button>
+	<main class="page-area">
+		<div class="container">
 
-				<div class="editFormArea"></div>
-				<hr>
+			<div class="two-column">
+
+				<section class="content-panel">
+
+					<div class="detail-head">
+
+						<div>
+							<span class="status open"> ${helpPost.postStatus} </span>
+
+							<h2>${helpPost.postTitle}</h2>
+
+							<div class="detail-meta">
+								<span>작성자 ${helpPost.userId}</span> <span>${helpPost.postAddrGu}
+									${helpPost.postAddrDong}</span> <span>작성
+									${helpPost.postCreatedAt}</span> <span>수정
+									${helpPost.postUpdatedAt}</span>
+							</div>
+						</div>
+
+						<div class="detail-price">
+							<span>예상 보수</span> <strong>${helpPost.expectedPay}원</strong>
+						</div>
+
+					</div>
+
+					<div class="detail-body">${helpPost.postContent}</div>
+
+					<div class="info-list">
+
+						<div class="info-item">
+							<span>도움 카테고리</span> <strong>${helpPost.helpCategory}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>도움 요청 지역</span> <strong>${helpPost.postAddrGu}
+								${helpPost.postAddrDong}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>확정 보수</span> <strong>${helpPost.finalPay}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>예상 도우미 인원</span> <strong>${helpPost.expectedHelperCount}명</strong>
+						</div>
+
+						<div class="info-item">
+							<span>지원 도우미 인원</span> <strong>${helpPost.appliedHelperCount}명</strong>
+						</div>
+
+						<div class="info-item">
+							<span>수락 도우미 인원</span> <strong>${helpPost.acceptedHelperCount}명</strong>
+						</div>
+
+						<div class="info-item">
+							<span>원하는 도우미 스킬</span> <strong>${helpPost.wantedSkill}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>도움 시간</span> <strong>${helpPost.requestTime}</strong>
+						</div>
+
+						<div class="info-item">
+							<span>신고 상태</span> <strong>${helpPost.deleted}</strong>
+						</div>
+
+					</div>
+
+					<c:url value='/help-posts/${helpPost.helpPostNo}/edit'
+						var="editHelpPost" />
+
+					<div class="form-actions">
+						<a href="${editHelpPost}" class="btn-basic"> 게시글 수정 </a>
+
+						<button type="button" class="btn-blue">도우미 지원</button>
+					</div>
+
+				</section>
+
+				<aside class="side-area">
+
+					<section class="side-box">
+						<h3>게시글 정보</h3>
+
+						<div class="profile-box">
+							<p class="profile-main">${helpPost.postStatus}</p>
+
+							<p class="profile-sub">지원 ${helpPost.appliedHelperCount}명 ·
+								수락 ${helpPost.acceptedHelperCount}명</p>
+						</div>
+					</section>
+
+				</aside>
+
 			</div>
-		</c:forEach>
-	</div>
 
-	<hr>
+			<section class="content-panel" style="margin-top: 24px;">
 
-	<form>
-		<input type="text" id="newCommentContent" placeholder="댓글을 입력하세요">
-		<button type="button" id="newCommentBtn">댓글 등록</button>
-	</form>
+				<div class="section-head">
+					<h2>댓글</h2>
+				</div>
+
+				<div id="commentArea" class="comment-list">
+
+					<c:forEach var="comment" items="${commentList}">
+						<div class="comment-card" data-comment-no="${comment.commentNo}">
+
+							<strong>${comment.userId}</strong>
+
+							<p class="commentContent">${comment.commentContent}</p>
+
+							<p>작성 : ${comment.commentCreatedAt}</p>
+
+							<p>
+								수정 : <span class="commentUpdatedAt">
+									${comment.commentUpdatedAt} </span>
+							</p>
+
+							<div class="form-actions">
+								<button type="button" id="editCommentBtn" class="btn-basic">
+									수정</button>
+
+								<button type="button" id="deleteCommentBtn" class="btn-red">
+									삭제</button>
+							</div>
+
+							<div class="editFormArea"></div>
+
+						</div>
+					</c:forEach>
+
+				</div>
+
+				<div class="form-row" style="margin-top: 24px;">
+					<label>댓글 작성</label> <input type="text" id="newCommentContent"
+						placeholder="댓글을 입력하세요">
+				</div>
+
+				<div class="form-actions">
+					<button type="button" id="newCommentBtn" class="btn-dark">
+						댓글 등록</button>
+				</div>
+
+			</section>
+
+		</div>
+	</main>
+
+	<footer class="footer">
+		<p>© TownHelper. 우리 동네 생활 도움 매칭 플랫폼</p>
+	</footer>
 
 	<c:url value='/help-posts/${helpPost.helpPostNo}/comments'
 		var="submitNewComment" />
@@ -82,15 +212,16 @@
 
 			success: function(newComment) {
 				commentArea.innerHTML +=
-					"<div data-comment-no='" + newComment.commentNo + "'>"
-					+ newComment.userId + "<br>"
-					+ "<span class='commentContent'>" + newComment.commentContent + "</span><br>"
-					+ newComment.commentCreatedAt + "<br>"
-					+ "<span class='commentUpdatedAt'>" + newComment.commentUpdatedAt + "</span><br>"
-					+ "<button type='button' id='editCommentBtn'>수정</button>"
-					+ "<button type='button' id='deleteCommentBtn'>삭제</button>"
+					"<div class='comment-card' data-comment-no='" + newComment.commentNo + "'>"
+					+ "<strong>" + newComment.userId + "</strong>"
+					+ "<p class='commentContent'>" + newComment.commentContent + "</p>"
+					+ "<p>작성 : " + newComment.commentCreatedAt + "</p>"
+					+ "<p>수정 : <span class='commentUpdatedAt'>" + newComment.commentUpdatedAt + "</span></p>"
+					+ "<div class='form-actions'>"
+					+ "<button type='button' id='editCommentBtn' class='btn-basic'>수정</button>"
+					+ "<button type='button' id='deleteCommentBtn' class='btn-red'>삭제</button>"
+					+ "</div>"
 					+ "<div class='editFormArea'></div>"
-					+ "<hr>"
 					+ "</div>";
 
 				newCommentContent.value = "";
@@ -110,12 +241,16 @@
 			}
 
 			editFormArea.innerHTML =
-				"<input type='text' class='editCommentContent' value='" + commentContentSpan.innerText.trim() + "'>"
-				+ "<button type='button' class='saveCommentBtn'>저장</button>"
-				+ "<button type='button' class='cancelEditBtn'>취소</button>";
+				"<div class='form-row' style='margin-top:14px;'>"
+				+ "<input type='text' class='editCommentContent' value='" + commentContentSpan.innerText.trim() + "'>"
+				+ "</div>"
+				+ "<div class='form-actions'>"
+				+ "<button type='button' class='saveCommentBtn btn-blue'>저장</button>"
+				+ "<button type='button' class='cancelEditBtn btn-light'>취소</button>"
+				+ "</div>";
 		}
 
-		if (event.target.className === "saveCommentBtn") {
+		if (event.target.classList.contains("saveCommentBtn")) {
 			const commentDiv = event.target.closest("[data-comment-no]");
 			const commentNo = commentDiv.dataset.commentNo;
 			const editCommentContent = commentDiv.querySelector(".editCommentContent").value;
@@ -141,7 +276,7 @@
 			});
 		}
 
-		if (event.target.className === "cancelEditBtn") {
+		if (event.target.classList.contains("cancelEditBtn")) {
 			const commentDiv = event.target.closest("[data-comment-no]");
 			const editFormArea = commentDiv.querySelector(".editFormArea");
 
@@ -167,5 +302,6 @@
 		}
 	});
 </script>
+
 </body>
 </html>

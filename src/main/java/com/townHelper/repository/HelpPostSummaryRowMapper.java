@@ -20,11 +20,15 @@ public class HelpPostSummaryRowMapper implements RowMapper<HelpPostSummaryDTO> {
 		post.setPostTitle(rs.getString("post_title"));
 		post.setExpectedPay(rs.getInt("expected_pay"));
 		post.setExpectedHelperCount(rs.getInt("expected_helper_count"));
-		post.setCurrentHelperCount(rs.getInt("current_helper_count"));
+		post.setCurrentHelperCount(rs.getInt("applied_helper_count"));
 		post.setRequestTime(rs.getTimestamp("request_time").toLocalDateTime());
 		post.setPostStatus(rs.getString("post_status"));
 		post.setPostCreatedAt(rs.getTimestamp("post_created_at").toLocalDateTime());
-		post.setPostUpdatedAt(rs.getTimestamp("post_updated_at").toLocalDateTime());
+		
+		if (rs.getTimestamp("post_updated_at") != null) {
+			post.setPostUpdatedAt(rs.getTimestamp("post_updated_at").toLocalDateTime());
+		}
+		
 		return post;
 	}
 
