@@ -5,15 +5,17 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.townHelper.domain.HelpApplyResponseDTO;
+import com.townHelper.domain.HelpApplyDTO;
 
-public class HelpApplyResponseRowMapper implements RowMapper<HelpApplyResponseDTO> {
+public class HelpApplyRowMapper implements RowMapper<HelpApplyDTO> {
 
 	@Override
-	public HelpApplyResponseDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		HelpApplyResponseDTO helpApply = new HelpApplyResponseDTO();
+	public HelpApplyDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		HelpApplyDTO helpApply = new HelpApplyDTO();
 		helpApply.setHelpApplyNo(rs.getInt("help_apply_no"));
+		helpApply.setUserNo(rs.getInt("user_no"));
 		helpApply.setUserId(rs.getString("user_id"));
+		helpApply.setHelpPostNo(rs.getInt("help_post_no"));
 		helpApply.setSuggestedPay(rs.getInt("suggested_pay"));
 		helpApply.setAppealContent(rs.getString("appeal_content"));
 		helpApply.setApplyStatus(rs.getString("apply_status"));

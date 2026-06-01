@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.townHelper.domain.NoticeRequestDTO;
+import com.townHelper.domain.NoticeDTO;
 
-public class NoticeRequestRowMapper implements RowMapper<NoticeRequestDTO> {
+public class NoticeRowMapper implements RowMapper<NoticeDTO> {
 
 	@Override
-	public NoticeRequestDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		NoticeRequestDTO notice = new NoticeRequestDTO();
+	public NoticeDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		NoticeDTO notice = new NoticeDTO();
 		notice.setNoticeNo(rs.getInt("notice_no"));
 		notice.setUserNo(rs.getInt("user_no"));
 		notice.setUserId(rs.getString("user_id"));

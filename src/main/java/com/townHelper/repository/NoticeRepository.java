@@ -2,19 +2,18 @@ package com.townHelper.repository;
 
 import java.util.List;
 
-import com.townHelper.domain.NoticeRequestDTO;
-import com.townHelper.domain.NoticeResponseDTO;
+import com.townHelper.domain.NoticeDTO;
 import com.townHelper.domain.NoticeSummaryDTO;
 
 public interface NoticeRepository {
 	
 	List<NoticeSummaryDTO> getAllNotices();
 	
-	NoticeResponseDTO getNoticeByNo(int noticeNo);
+	NoticeDTO getNoticeByNo(int noticeNo);
 	
-	void setNewNotice(NoticeRequestDTO newNotice);
+	void setNewNotice(NoticeDTO newNotice);
 	
-	void setEditNotice(NoticeRequestDTO editNotice);
+	void setEditNotice(NoticeDTO editNotice);
 	
 	void setDeleteNotice(int noticeNo);
 

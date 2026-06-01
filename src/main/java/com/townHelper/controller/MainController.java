@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.townHelper.domain.HelpPostSummaryDTO;
 import com.townHelper.service.HelpPostService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class MainController {
 
@@ -17,12 +19,12 @@ public class MainController {
 	HelpPostService helpPostService;
 
 	@GetMapping("/")
-	public String getMain(Model model) {
+	public String getMain(Model model, HttpSession session) {
+		
+		session.setAttribute("loginUserNo", 2);
+		
 		List<HelpPostSummaryDTO> helpPostList = helpPostService.getAllHelpPostsSummary();
 		model.addAttribute("helpPostList", helpPostList);
-		
-		System.out.println(helpPostList.get(0).getPostTitle());
-		
 		return "main";
 	}
 

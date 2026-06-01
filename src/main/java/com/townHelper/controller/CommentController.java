@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.townHelper.domain.CommentDTO;
 import com.townHelper.service.CommentService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class CommentController {
 
@@ -30,10 +32,10 @@ public class CommentController {
 	
 	@PostMapping("/help-posts/{helpPostNo}/comments")
 	@ResponseBody
-	public CommentDTO submitNewComment(@RequestBody CommentDTO newComment, @PathVariable("helpPostNo") int helpPostNo) {
+	public CommentDTO submitNewComment(@RequestBody CommentDTO newComment, @PathVariable("helpPostNo") int helpPostNo, HttpSession session) {
 		
-		// 임시
-		newComment.setUserNo(1);
+		Integer loginUserNo = (Integer) session.getAttribute("loginUserNo");
+		newComment.setUserNo(loginUserNo);
 		
 		Integer returnedPK = commentService.setNewComment(newComment);
 		CommentDTO comment = commentService.getCommentByNo(returnedPK);

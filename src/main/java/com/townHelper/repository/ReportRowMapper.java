@@ -5,20 +5,21 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.townHelper.domain.ReportRequestDTO;
+import com.townHelper.domain.ReportDTO;
 
-public class ReportRequestRowMapper implements RowMapper<ReportRequestDTO> {
+public class ReportRowMapper implements RowMapper<ReportDTO> {
 
 	@Override
-	public ReportRequestDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		ReportRequestDTO report = new ReportRequestDTO();
+	public ReportDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ReportDTO report = new ReportDTO();
 		report.setReportNo(rs.getInt("report_no"));
 		report.setUserNo(rs.getInt("user_no"));
+		report.setUserId(rs.getString("user_id"));
 		report.setReportTargetType(rs.getString("report_target_type"));
-		report.setReportTargetNo(rs.getInt("report_target_no"));
 		report.setReportReason(rs.getString("report_reason"));
 		report.setReportContent(rs.getString("report_content"));
 		report.setReportStatus(rs.getString("report_status"));
+		report.setReportCreatedAt(rs.getTimestamp("report_created_at").toLocalDateTime());
 		report.setReportProcessedAt(rs.getTimestamp("report_processed_at").toLocalDateTime());
 		return report;
 	}

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.townHelper.domain.ReportResponseDTO;
+import com.townHelper.domain.ReportDTO;
 
 @Repository
 public class ReportRepositoryImpl implements ReportRepository {
@@ -19,16 +19,16 @@ public class ReportRepositoryImpl implements ReportRepository {
 	}
 
 	@Override
-	public List<ReportResponseDTO> getAllReports() {
+	public List<ReportDTO> getAllReports() {
 		String SQL = "SELECT * FROM report ORDER BY report_created_at DESC";
-		List<ReportResponseDTO> reportList = template.query(SQL, new ReportResponseRowMapper());
+		List<ReportDTO> reportList = template.query(SQL, new ReportRowMapper());
 		return reportList;
 	}
 
 	@Override
-	public List<ReportResponseDTO> getAllReportsByUserNo(int userNo) {
+	public List<ReportDTO> getAllReportsByUserNo(int userNo) {
 		String SQL = "SELECT * FROM report WHERE user_no = ? ORDER BY report_created_at DESC";
-		List<ReportResponseDTO> reportList = template.query(SQL, new ReportResponseRowMapper(), userNo);
+		List<ReportDTO> reportList = template.query(SQL, new ReportRowMapper(), userNo);
 		return reportList;
 	}
 

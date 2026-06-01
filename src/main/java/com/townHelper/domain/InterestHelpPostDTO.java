@@ -1,12 +1,14 @@
 package com.townHelper.domain;
 
-public class InterestHelpPostRequestDTO {
-	
+public class InterestHelpPostDTO {
+
 	private int interestHelpPostNo;
 	private int userNo;
 	private int helpPostNo;
-	
-	public InterestHelpPostRequestDTO() {
+	private String helpCategory;
+	private String helpPostTitle;
+
+	public InterestHelpPostDTO() {
 	}
 
 	public int getInterestHelpPostNo() {
@@ -31,6 +33,22 @@ public class InterestHelpPostRequestDTO {
 
 	public void setHelpPostNo(int helpPostNo) {
 		this.helpPostNo = helpPostNo;
+	}
+
+	public String getHelpCategory() {
+		return helpCategory;
+	}
+
+	public void setHelpCategory(String helpCategory) {
+		this.helpCategory = helpCategory;
+	}
+
+	public String getHelpPostTitle() {
+		return helpPostTitle;
+	}
+
+	public void setHelpPostTitle(String helpPostTitle) {
+		this.helpPostTitle = helpPostTitle;
 	}
 
 }

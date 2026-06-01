@@ -2,18 +2,20 @@ package com.townHelper.domain;
 
 import java.time.LocalDateTime;
 
-public class ReportRequestDTO {
+public class ReportDTO {
 
 	private int reportNo;
 	private int userNo;
+	private String userId;
 	private String reportTargetType;
 	private int reportTargetNo;
 	private String reportReason;
 	private String reportContent;
 	private String reportStatus;
+	private LocalDateTime reportCreatedAt;
 	private LocalDateTime reportProcessedAt;
 
-	public ReportRequestDTO() {
+	public ReportDTO() {
 	}
 
 	public int getReportNo() {
@@ -30,6 +32,14 @@ public class ReportRequestDTO {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getReportTargetType() {
@@ -70,6 +80,14 @@ public class ReportRequestDTO {
 
 	public void setReportStatus(String reportStatus) {
 		this.reportStatus = reportStatus;
+	}
+
+	public LocalDateTime getReportCreatedAt() {
+		return reportCreatedAt;
+	}
+
+	public void setReportCreatedAt(LocalDateTime reportCreatedAt) {
+		this.reportCreatedAt = reportCreatedAt;
 	}
 
 	public LocalDateTime getReportProcessedAt() {

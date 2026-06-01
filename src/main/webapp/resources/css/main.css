@@ -24,6 +24,27 @@ input {
   margin: 0 auto;
 }
 
+.post-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interestBtn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #111827;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.interestBtn:disabled {
+    background: #9ca3af;
+    cursor: default;
+}
+
 /* HEADER */
 .top-header {
   background: #fff;

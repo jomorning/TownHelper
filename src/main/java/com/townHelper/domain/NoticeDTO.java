@@ -2,17 +2,15 @@ package com.townHelper.domain;
 
 import java.time.LocalDateTime;
 
-public class NoticeResponseDTO {
+public class NoticeDTO {
 
 	private int noticeNo;
+	private int userNo;
 	private String userId;
 	private String noticeTitle;
 	private String noticeContent;
 	private LocalDateTime noticeCreatedAt;
 	private LocalDateTime noticeUpdatedAt;
-
-	public NoticeResponseDTO() {
-	}
 
 	public int getNoticeNo() {
 		return noticeNo;
@@ -20,6 +18,14 @@ public class NoticeResponseDTO {
 
 	public void setNoticeNo(int noticeNo) {
 		this.noticeNo = noticeNo;
+	}
+
+	public int getUserNo() {
+		return userNo;
+	}
+
+	public void setUserNo(int userNo) {
+		this.userNo = userNo;
 	}
 
 	public String getUserId() {

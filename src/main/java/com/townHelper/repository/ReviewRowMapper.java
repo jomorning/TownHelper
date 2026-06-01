@@ -5,20 +5,24 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.townHelper.domain.ReviewRequestDTO;
+import com.townHelper.domain.ReviewDTO;
 
-public class ReviewRequestRowMapper implements RowMapper<ReviewRequestDTO> {
+public class ReviewRowMapper implements RowMapper<ReviewDTO> {
 
 	@Override
-	public ReviewRequestDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		ReviewRequestDTO review = new ReviewRequestDTO();
+	public ReviewDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ReviewDTO review = new ReviewDTO();
 		review.setReviewNo(rs.getInt("review_no"));
 		review.setHelpPostNo(rs.getInt("help_post_no"));
+		review.setHelpCategory(rs.getString("help_category"));
 		review.setWriterUserNo(rs.getInt("writer_user_no"));
+		review.setWriterUserId(rs.getString("writer_user_id"));
 		review.setTargetUserNo(rs.getInt("target_user_no"));
+		review.setTargetUserId(rs.getString("target_user_id"));
 		review.setTargetType(rs.getString("target_type"));
 		review.setReviewStar(rs.getInt("review_star"));
 		review.setReviewContent(rs.getString("review_content"));
+		review.setReviewCreatedAt(rs.getTimestamp("review_created_at").toLocalDateTime());
 		return review;
 	}
 

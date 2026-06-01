@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.townHelper.domain.NoticeRequestDTO;
-import com.townHelper.domain.NoticeResponseDTO;
+import com.townHelper.domain.NoticeDTO;
 import com.townHelper.domain.NoticeSummaryDTO;
 
 @Repository
@@ -28,20 +27,20 @@ public class NoticeRepositoryImpl implements NoticeRepository {
 	}
 
 	@Override
-	public NoticeResponseDTO getNoticeByNo(int noticeNo) {
+	public NoticeDTO getNoticeByNo(int noticeNo) {
 		String SQL = "SELECT * FROM notice WHERE notice_no = ?";
-		NoticeResponseDTO notice = template.queryForObject(SQL, new NoticeResponseRowMapper(), noticeNo);
+		NoticeDTO notice = template.queryForObject(SQL, new NoticeRowMapper(), noticeNo);
 		return notice;
 	}
 
 	@Override
-	public void setNewNotice(NoticeRequestDTO newNotice) {
+	public void setNewNotice(NoticeDTO newNotice) {
 		String SQL = "INSERT INTO notice(user_no, notice_title, notice_content) VALUES(?,?,?)";
 		template.update(SQL, newNotice.getUserNo(), newNotice.getNoticeTitle(), newNotice.getNoticeContent());
 	}
 
 	@Override
-	public void setEditNotice(NoticeRequestDTO editNotice) {
+	public void setEditNotice(NoticeDTO editNotice) {
 		String SQL = "UPDATE notice SET notice_title = ?, notice_content = ? WHERE notice_no = ?";
 		template.update(SQL, editNotice.getNoticeTitle(), editNotice.getNoticeContent(), editNotice.getNoticeNo());
 	}

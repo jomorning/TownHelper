@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.townHelper.domain.InterestHelpPostRequestDTO;
-import com.townHelper.domain.InterestHelpPostResponseDTO;
+import com.townHelper.domain.InterestHelpPostDTO;
 
 @Repository
 public class InterestHelpPostRepositoryImpl implements InterestHelpPostRepository {
@@ -20,13 +19,13 @@ public class InterestHelpPostRepositoryImpl implements InterestHelpPostRepositor
 	}
 
 	@Override
-	public List<InterestHelpPostResponseDTO> getAllInterestHelpPosts(int userNo) {
+	public List<InterestHelpPostDTO> getAllInterestHelpPosts(int userNo) {
 		String SQL = "SELECT * FROM interest_help_post WHERE user_no = ?";
-		return template.query(SQL, new InterestHelpPostResponseRowMapper(), userNo);
+		return template.query(SQL, new InterestHelpPostRowMapper(), userNo);
 	}
 
 	@Override
-	public void setNewInterestHelpPost(InterestHelpPostRequestDTO newInterestHelpPost) {
+	public void setNewInterestHelpPost(InterestHelpPostDTO newInterestHelpPost) {
 		String SQL = "INSERT INTO interest_help_post(user_no, help_post_no) VALUES(?,?)";
 		template.update(SQL, newInterestHelpPost.getUserNo(), newInterestHelpPost.getHelpPostNo());
 	}

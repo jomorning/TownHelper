@@ -16,7 +16,10 @@ import com.townHelper.domain.CommentDTO;
 import com.townHelper.domain.HelpPostDTO;
 import com.townHelper.domain.HelpPostSummaryDTO;
 import com.townHelper.service.CommentService;
+import com.townHelper.service.HelpApplyService;
 import com.townHelper.service.HelpPostService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HelpPostController {
@@ -25,7 +28,10 @@ public class HelpPostController {
 	HelpPostService helpPostService;
 	
 	@Autowired
-	CommentService commentService;	
+	CommentService commentService;
+	
+	@Autowired
+	HelpApplyService helpApplyService;
 	
 	@GetMapping("/help-posts")
 	public String getHelpPosts(Model model) {
@@ -49,10 +55,11 @@ public class HelpPostController {
 	}
 	
 	@PostMapping("/help-posts")
-	public String submitNewHelpPost(@ModelAttribute("newHelpPost") HelpPostDTO newHelpPost) {
+	public String submitNewHelpPost(@ModelAttribute("newHelpPost") HelpPostDTO newHelpPost, HttpSession session) {
 		
-		// 임시 작성자
-		newHelpPost.setUserNo(1);
+		Integer loginUserNo = (Integer) session.getAttribute("loginUserNo");
+		newHelpPost.setUserNo(loginUserNo);
+		
 		Integer returnedPK = helpPostService.setNewHelpPost(newHelpPost);
 		return "redirect:/help-posts/" + returnedPK;
 	}

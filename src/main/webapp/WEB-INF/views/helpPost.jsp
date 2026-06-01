@@ -110,9 +110,28 @@
 						var="editHelpPost" />
 
 					<div class="form-actions">
-						<a href="${editHelpPost}" class="btn-basic"> 게시글 수정 </a>
+						<a href="${editHelpPost}" class="btn-basic">게시글 수정</a>
+					</div>
 
-						<button type="button" class="btn-blue">도우미 지원</button>
+					<div class="apply-box" style="margin-top: 24px;">
+
+						<h3>도우미 지원</h3>
+
+						<div class="form-row">
+							<label>제안 보수</label> <input type="number" id="suggestedPay"
+								placeholder="제안 보수를 입력하세요">
+						</div>
+
+						<div class="form-row">
+							<label>어필 내용</label> <input type="text" id="appealContent"
+								placeholder="어필 내용을 입력하세요">
+						</div>
+
+						<div class="form-actions">
+							<button type="button" id="newHelpApplyBtn" class="btn-dark">
+								도우미 지원</button>
+						</div>
+
 					</div>
 
 				</section>
@@ -122,13 +141,41 @@
 					<section class="side-box">
 						<h3>게시글 정보</h3>
 
-						<div class="profile-box">
-							<p class="profile-main">${helpPost.postStatus}</p>
+						<p class="profile-sub">
+							지원 <span id="appliedCount">${helpPost.appliedHelperCount}</span>명
+							· 수락 <span id="acceptedCount">${helpPost.acceptedHelperCount}</span>명
+						</p>
 
-							<p class="profile-sub">지원 ${helpPost.appliedHelperCount}명 ·
-								수락 ${helpPost.acceptedHelperCount}명</p>
-						</div>
+						<p class="profile-sub">
+							최저 제안 <span id="minSuggestedPay">-</span>원 · 최고 제안 <span
+								id="maxSuggestedPay">-</span>원
+						</p>
 					</section>
+
+					<section class="content-panel" style="margin-top: 24px;">
+
+						<div class="section-head">
+							<h2>도우미 신청 목록</h2>
+						</div>
+
+						<div id="helpApplyArea" class="comment-list"></div>
+
+					</section>
+
+					<c:if test="${helpPost.postStatus == 'COMPLETE'}">
+
+						<div class="apply-box" style="margin-top: 24px;">
+							<h3>요청자 리뷰</h3>
+
+							<p class="profile-sub">완료된 도움 요청입니다. 게시글 작성자에게 리뷰를 남길 수 있습니다.
+							</p>
+
+							<a
+								href="${pageContext.request.contextPath}/reviews/${helpPost.userNo}/new?targetType=REQUESTER&helpPostNo=${helpPost.helpPostNo}"
+								class="btn-dark"> 요청자 리뷰 작성 </a>
+						</div>
+
+					</c:if>
 
 				</aside>
 
@@ -300,6 +347,210 @@
 				}
 			});
 		}
+	});
+	
+	const helpApplyArea = document.getElementById("helpApplyArea");
+	const newHelpApplyBtn = document.getElementById("newHelpApplyBtn");
+	const suggestedPay = document.getElementById("suggestedPay");
+	const appealContent = document.getElementById("appealContent");
+
+	const helpApplyBaseUrl = "${pageContext.request.contextPath}/help-posts/${helpPost.helpPostNo}/help-applies";
+
+	function renderHelpApplyList(helpApplyList) {
+	    helpApplyArea.innerHTML = "";
+	    let appliedCount = 0;
+	    let acceptedCount = 0;
+	    let minSuggestedPay = null;
+	    let maxSuggestedPay = null;
+	    
+	    const postStatus = "${helpPost.postStatus}";
+
+	    helpApplyList.forEach(function(apply) {
+	    	appliedCount++;
+	    	
+	    	 if (apply.applyStatus === "ACCEPTED") {
+	             acceptedCount++;
+	         }
+	    	 
+	    	 const pay = Number(apply.suggestedPay);
+	    	 
+	    	 if (!isNaN(pay)) {
+	             if (minSuggestedPay === null || pay < minSuggestedPay) {
+	                 minSuggestedPay = pay;
+	             }
+
+	             if (maxSuggestedPay === null || pay > maxSuggestedPay) {
+	                 maxSuggestedPay = pay;
+	             }
+	         }
+	    	 
+	    	 let reviewButton = "";
+	    	 
+	    	 if (postStatus === "COMPLETE"
+	    	        && apply.applyStatus === "ACCEPTED") {
+	    	    reviewButton =
+	    	        "<a href='${pageContext.request.contextPath}/reviews/" + apply.userNo + "/new?targetType=HELPER&helpPostNo=" + ${helpPost.helpPostNo} 
+	    	        + "' class='btn-dark'>리뷰 작성</a>";
+	    	}
+	    	 
+	         helpApplyArea.innerHTML +=
+	            "<div class='comment-card' data-help-apply-no='" + apply.helpApplyNo + "'>"
+	            + "<strong>신청자 ID: " + apply.userId + "</strong>"
+	            + "<p>제안 보수: " + apply.suggestedPay + "원</p>"
+	            + "<p class='appealContent'>" + apply.appealContent + "</p>"
+	            + "<p>상태: <span class='applyStatus'>" + apply.applyStatus + "</span></p>"
+	            + "<p>신청일: " + apply.applyCreatedAt + "</p>"
+	            + "<div class='form-actions'>"
+	            + "<button type='button' class='acceptApplyBtn btn-blue'>수락</button>"
+	            + "<button type='button' class='rejectApplyBtn btn-red'>거절</button>"
+	            + "<button type='button' class='editApplyBtn btn-basic'>수정</button>"
+	            + "<button type='button' class='deleteApplyBtn btn-red'>삭제</button>"
+	            + reviewButton
+	            + "</div>"
+	            + "<div class='editApplyFormArea'></div>"
+	            + "</div>";
+	    });
+	    
+	    document.getElementById("appliedCount").innerText = appliedCount;
+	    document.getElementById("acceptedCount").innerText = acceptedCount;
+	    document.getElementById("minSuggestedPay").innerText =
+	        minSuggestedPay === null ? "-" : minSuggestedPay.toLocaleString();
+	    document.getElementById("maxSuggestedPay").innerText =
+	        maxSuggestedPay === null ? "-" : maxSuggestedPay.toLocaleString();
+	}
+
+	function loadHelpApplyList() {
+	    $.ajax({
+	        url: helpApplyBaseUrl,
+	        type: "GET",
+	        success: function(helpApplyList) {
+	            renderHelpApplyList(helpApplyList);
+	        }
+	    });
+	}
+
+	loadHelpApplyList();
+
+	newHelpApplyBtn.addEventListener("click", function() {
+	    $.ajax({
+	        url: helpApplyBaseUrl,
+	        type: "POST",
+	        contentType: "application/json",
+	        data: JSON.stringify({
+	            helpPostNo: ${helpPost.helpPostNo},
+	            suggestedPay: suggestedPay.value,
+	            appealContent: appealContent.value
+	        }),
+	        success: function(helpApplyList) {
+	            renderHelpApplyList(helpApplyList);
+	            suggestedPay.value = "";
+	            appealContent.value = "";
+	        }
+	    });
+	});
+
+	helpApplyArea.addEventListener("click", function(event) {
+	    const applyDiv = event.target.closest("[data-help-apply-no]");
+
+	    if (!applyDiv) {
+	        return;
+	    }
+
+	    const helpApplyNo = applyDiv.dataset.helpApplyNo;
+
+	    if (event.target.classList.contains("acceptApplyBtn")) {
+
+	        $.ajax({
+	            url: helpApplyBaseUrl + "/" + helpApplyNo + "/status",
+	            type: "PUT",
+	            contentType: "application/json",
+	            data: JSON.stringify({
+	                helpApplyNo: helpApplyNo,
+	                applyStatus: "ACCEPTED"
+	            }),
+	            success: function(helpApplyList) {
+	                renderHelpApplyList(helpApplyList);
+	            }
+	        });
+
+	        return;
+	    }
+
+	    if (event.target.classList.contains("rejectApplyBtn")) {
+
+	        $.ajax({
+	            url: helpApplyBaseUrl + "/" + helpApplyNo + "/status",
+	            type: "PUT",
+	            contentType: "application/json",
+	            data: JSON.stringify({
+	                helpApplyNo: helpApplyNo,
+	                applyStatus: "REJECTED"
+	            }),
+	            success: function(helpApplyList) {
+	                renderHelpApplyList(helpApplyList);
+	            }
+	        });
+
+	        return;
+	    }
+	    if (event.target.classList.contains("editApplyBtn")) {
+	        const editApplyFormArea = applyDiv.querySelector(".editApplyFormArea");
+	        const currentAppealContent = applyDiv.querySelector(".appealContent").innerText;
+
+	        if (editApplyFormArea.innerHTML.trim() !== "") {
+	            return;
+	        }
+
+	        editApplyFormArea.innerHTML =
+	            "<div class='form-row' style='margin-top:14px;'>"
+	            + "<input type='number' class='editSuggestedPay' placeholder='수정 제안 보수'>"
+	            + "</div>"
+	            + "<div class='form-row'>"
+	            + "<input type='text' class='editAppealContent' value='" + currentAppealContent + "'>"
+	            + "</div>"
+	            + "<div class='form-actions'>"
+	            + "<button type='button' class='saveApplyBtn btn-blue'>저장</button>"
+	            + "<button type='button' class='cancelApplyEditBtn btn-light'>취소</button>"
+	            + "</div>";
+	    }
+
+	    if (event.target.classList.contains("saveApplyBtn")) {
+	        const editSuggestedPay = applyDiv.querySelector(".editSuggestedPay").value;
+	        const editAppealContent = applyDiv.querySelector(".editAppealContent").value;
+
+	        $.ajax({
+	            url: helpApplyBaseUrl + "/" + helpApplyNo,
+	            type: "PUT",
+	            contentType: "application/json",
+	            data: JSON.stringify({
+	                helpApplyNo: helpApplyNo,
+	                helpPostNo: ${helpPost.helpPostNo},
+	                suggestedPay: editSuggestedPay,
+	                appealContent: editAppealContent
+	            }),
+	            success: function(helpApplyList) {
+	                renderHelpApplyList(helpApplyList);
+	            }
+	        });
+	    }
+
+	    if (event.target.classList.contains("cancelApplyEditBtn")) {
+	        applyDiv.querySelector(".editApplyFormArea").innerHTML = "";
+	    }
+
+	    if (event.target.classList.contains("deleteApplyBtn")) {
+	        if (!confirm("신청을 삭제하시겠습니까?")) {
+	            return;
+	        }
+
+	        $.ajax({
+	            url: helpApplyBaseUrl + "/" + helpApplyNo,
+	            type: "DELETE",
+	            success: function(helpApplyList) {
+	                renderHelpApplyList(helpApplyList);
+	            }
+	        });
+	    }
 	});
 </script>
 

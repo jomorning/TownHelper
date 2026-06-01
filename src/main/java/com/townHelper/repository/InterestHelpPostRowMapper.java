@@ -5,14 +5,14 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.townHelper.domain.InterestHelpPostResponseDTO;
+import com.townHelper.domain.InterestHelpPostDTO;
 
-public class InterestHelpPostResponseRowMapper implements RowMapper<InterestHelpPostResponseDTO> {
+public class InterestHelpPostRowMapper implements RowMapper<InterestHelpPostDTO> {
 
 	@Override
-	public InterestHelpPostResponseDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		InterestHelpPostResponseDTO interest = new InterestHelpPostResponseDTO();
-		interest.setInterestHelpPost(rs.getInt("interest_help_post"));
+	public InterestHelpPostDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		InterestHelpPostDTO interest = new InterestHelpPostDTO();
+		interest.setInterestHelpPostNo(rs.getInt("interest_help_post"));
 		interest.setUserNo(rs.getInt("user_no"));
 		interest.setHelpPostNo(rs.getInt("help_post_no"));
 		interest.setHelpCategory(rs.getString("help_category"));

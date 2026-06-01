@@ -1,10 +1,10 @@
-package com.townHelper.repository;
+package com.townHelper.service;
 
 import java.util.List;
 
 import com.townHelper.domain.HelpApplyDTO;
 
-public interface HelpApplyRepository {
+public interface HelpApplyService {
 
 	// 게시글당 지원 목록 조회
 	List<HelpApplyDTO> getAllHelpAppliesByPost(int helpPostNo);
