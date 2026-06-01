@@ -21,8 +21,8 @@ public class HelpPostServiceImpl implements HelpPostService {
 	UserRepository userRepository;
 
 	@Override
-	public List<HelpPostSummaryDTO> getAllHelpPostsSummary() {
-		List<HelpPostSummaryDTO> helpPostList = helpPostRepository.getAllHelpPostsSummary();
+	public List<HelpPostSummaryDTO> getAllHelpPostsSummary(int loginUserNo) {
+		List<HelpPostSummaryDTO> helpPostList = helpPostRepository.getAllHelpPostsSummary(loginUserNo);
 		return helpPostList;
 	}
 

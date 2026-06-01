@@ -12,6 +12,7 @@ public class HelpPostSummaryRowMapper implements RowMapper<HelpPostSummaryDTO> {
 	@Override
 	public HelpPostSummaryDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		HelpPostSummaryDTO post = new HelpPostSummaryDTO();
+		post.setInterested(rs.getBoolean("interested"));
 		post.setHelpPostNo(rs.getInt("help_post_no"));
 		post.setUserId(rs.getString("user_id"));
 		post.setHelpCategory(rs.getString("help_category"));

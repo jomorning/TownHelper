@@ -20,7 +20,7 @@ public class InterestHelpPostRepositoryImpl implements InterestHelpPostRepositor
 
 	@Override
 	public List<InterestHelpPostDTO> getAllInterestHelpPosts(int userNo) {
-		String SQL = "SELECT * FROM interest_help_post WHERE user_no = ?";
+		String SQL = "SELECT interest_help_post_no, interest_help_post.user_no, interest_help_post.help_post_no, help_post.help_category, help_post.post_title FROM interest_help_post JOIN help_post ON interest_help_post.help_post_no = help_post.help_post_no WHERE interest_help_post.user_no = ?";
 		return template.query(SQL, new InterestHelpPostRowMapper(), userNo);
 	}
 

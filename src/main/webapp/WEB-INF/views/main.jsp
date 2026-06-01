@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>TownHelper</title>
@@ -34,6 +35,7 @@
 	cursor: default;
 }
 </style>
+
 <body>
 	<header class="top-header">
 		<div class="container header-inner">
@@ -47,7 +49,7 @@
 			<nav class="top-nav">
 				<a href="${main}help-posts">도움 찾기</a> <a
 					href="${main}help-posts/new">요청하기</a> <a
-					href="${main}users/${loginUserNo}/interestHelpPosts">관심글</a> <a
+					href="${main}interestHelpPosts">관심글</a> <a
 					href="${main}users/${loginUserNo}">마이페이지</a> <a href="${main}login">로그인</a>
 				<a href="${main}users/register" class="join-btn">회원가입</a>
 			</nav>
@@ -123,8 +125,18 @@
 
 									<div class="post-bottom">
 										<strong>${helpPost.expectedPay}원</strong>
-										<button type="button" class="interestBtn"
-											data-help-post-no="${helpPost.helpPostNo}">관심등록</button>
+
+										<c:choose>
+											<c:when test="${helpPost.interested}">
+												<button type="button" class="interestBtn" disabled>
+													관심등록됨</button>
+											</c:when>
+
+											<c:otherwise>
+												<button type="button" class="interestBtn"
+													data-help-post-no="${helpPost.helpPostNo}">관심등록</button>
+											</c:otherwise>
+										</c:choose>
 									</div>
 								</div>
 
@@ -142,11 +154,29 @@
 					<h3>최근 관심글</h3>
 
 					<ul class="interest-list">
-						<li><a href="#">고양이 돌봄 가능하신 분</a> <span>OPEN</span></li>
 
-						<li><a href="#">싱크대 수리 도움 요청</a> <span>OPEN</span></li>
+						<c:choose>
 
-						<li><a href="#">주말 청소 도와주실 분</a> <span>CLOSED</span></li>
+							<c:when test="${empty interestHelpPostList}">
+								<li><span>관심 등록한 게시글이 없습니다.</span></li>
+							</c:when>
+
+							<c:otherwise>
+
+								<c:forEach var="interest" items="${interestHelpPostList}"
+									begin="0" end="4">
+
+									<li><a
+										href="${pageContext.request.contextPath}/help-posts/${interest.helpPostNo}">
+											${interest.helpPostTitle} </a> <span>
+											${interest.helpCategory} </span></li>
+
+								</c:forEach>
+
+							</c:otherwise>
+
+						</c:choose>
+
 					</ul>
 				</section>
 
@@ -154,18 +184,18 @@
 					<h3>내 프로필</h3>
 
 					<div class="profile-box">
-						<p class="profile-main">짐 옮기기: 저 짐 잘 옮겨요</p>
-						<p class="profile-sub">도우미 활동 3건 · 건별 별점 표시</p>
+						<p class="profile-main">${loginUser.userId}</p>
+						<p class="profile-main">${loginUser.userSkill}</p>
+						<p class="profile-sub">도우미 활동 ${helperWorkCount}건 · 평균 별점
+							${averageReviewStar}점</p>
 					</div>
 				</section>
+				<h3>바로가기</h3>
 
-				<section class="side-box">
-					<h3>바로가기</h3>
-
-					<div class="quick-menu">
-						<a href="${main}help-posts/new">요청글 작성</a> <a
-							href="${main}help-posts">내 요청글</a> <a href="#">채팅</a> <a href="#">신고하기</a>
-					</div>
+				<div class="quick-menu">
+					<a href="${main}help-posts/new">요청글 작성</a> <a
+						href="${main}help-posts">내 요청글</a> <a href="#">채팅</a> <a href="#">신고하기</a>
+				</div>
 				</section>
 
 			</aside>
@@ -178,36 +208,34 @@
 	</footer>
 
 	<script>
-		$(".interestBtn")
-				.click(
-						function(event) {
+		$(".interestBtn").click(function(event) {
 
-							event.preventDefault();
-							event.stopPropagation();
+			event.preventDefault();
+			event.stopPropagation();
 
-							const helpPostNo = $(this).data("help-post-no");
-							const button = $(this);
+			const helpPostNo = $(this).data("help-post-no");
+			const button = $(this);
 
-							$
-									.ajax({
-										url : "${pageContext.request.contextPath}/users/${loginUserNo}/interestHelpPosts",
-										type : "POST",
-										contentType : "application/json",
-										data : JSON.stringify({
-											helpPostNo : helpPostNo
-										}),
+			$.ajax({
+				url : "${pageContext.request.contextPath}/interestHelpPosts",
+				type : "POST",
+				contentType : "application/json",
+				data : JSON.stringify({
+					helpPostNo : helpPostNo
+				}),
 
-										success : function() {
-											button.text("관심등록됨");
-											button.prop("disabled", true);
-										},
+				success : function() {
+					button.text("관심등록됨");
+					button.prop("disabled", true);
+				},
 
-										error : function() {
-											alert("관심글 등록에 실패했습니다.");
-										}
-									});
-						});
+				error : function() {
+					alert("관심글 등록에 실패했습니다.");
+				}
+			});
+		});
 	</script>
 
 </body>
+
 </html>

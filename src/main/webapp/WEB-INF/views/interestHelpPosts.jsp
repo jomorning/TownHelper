@@ -82,9 +82,8 @@
 
 <script>
 const interestHelpPostArea = document.getElementById("interestHelpPostArea");
-const userNo = ${userNo};
 const interestBaseUrl =
-    "${pageContext.request.contextPath}/users/" + userNo + "/interestHelpPosts";
+    "${pageContext.request.contextPath}/interestHelpPosts";
 
 function renderInterestHelpPostList(list) {
     interestHelpPostArea.innerHTML = "";

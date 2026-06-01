@@ -8,7 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.townHelper.domain.HelpPostSummaryDTO;
+import com.townHelper.domain.InterestHelpPostDTO;
+import com.townHelper.domain.UserDTO;
 import com.townHelper.service.HelpPostService;
+import com.townHelper.service.InterestHelpPostService;
+import com.townHelper.service.ReviewService;
+import com.townHelper.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -17,14 +22,39 @@ public class MainController {
 
 	@Autowired
 	HelpPostService helpPostService;
+	
+	@Autowired
+	InterestHelpPostService interestHelpPostService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	ReviewService reviewService;
 
 	@GetMapping("/")
 	public String getMain(Model model, HttpSession session) {
-		
+
 		session.setAttribute("loginUserNo", 2);
-		
-		List<HelpPostSummaryDTO> helpPostList = helpPostService.getAllHelpPostsSummary();
+
+		int loginUserNo = (Integer) session.getAttribute("loginUserNo");
+
+		List<HelpPostSummaryDTO> helpPostList = helpPostService.getAllHelpPostsSummary(loginUserNo);
+
+		List<InterestHelpPostDTO> interestHelpPostList = interestHelpPostService.getAllInterestHelpPosts(loginUserNo);
+
+		model.addAttribute("loginUserNo", loginUserNo);
 		model.addAttribute("helpPostList", helpPostList);
+		model.addAttribute("interestHelpPostList", interestHelpPostList);
+		
+		
+		UserDTO loginUser = userService.getUserByNo(loginUserNo);
+		// int helperWorkCount = helpApplyService.getAcceptedHelpCount(loginUserNo);
+		// double averageReviewStar = reviewService.getAverageReviewStar(loginUserNo);
+
+		model.addAttribute("loginUser", loginUser);
+		// model.addAttribute("helperWorkCount", helperWorkCount);
+		// model.addAttribute("averageReviewStar", averageReviewStar);
 		return "main";
 	}
 

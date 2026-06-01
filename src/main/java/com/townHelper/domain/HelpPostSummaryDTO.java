@@ -18,6 +18,7 @@ public class HelpPostSummaryDTO {
 	private String postStatus;
 	private LocalDateTime postCreatedAt;
 	private LocalDateTime postUpdatedAt;
+	private boolean interested;
 
 	public HelpPostSummaryDTO() {
 	}
@@ -124,6 +125,14 @@ public class HelpPostSummaryDTO {
 
 	public void setPostUpdatedAt(LocalDateTime postUpdatedAt) {
 		this.postUpdatedAt = postUpdatedAt;
+	}
+
+	public boolean isInterested() {
+		return interested;
+	}
+
+	public void setInterested(boolean interested) {
+		this.interested = interested;
 	}
 
 }
