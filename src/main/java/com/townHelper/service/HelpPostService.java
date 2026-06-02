@@ -12,6 +12,9 @@ public interface HelpPostService {
 
 	// 도움 요청 게시글 단건 조회
 	HelpPostDTO getHelpPostByNo(int helpPostNo);
+	
+	// 도움 요청 게시글 상태 변경
+	void setHelpPostComplete(int helpPostNo);
 
 	Integer setNewHelpPost(HelpPostDTO newHelpPost);
 

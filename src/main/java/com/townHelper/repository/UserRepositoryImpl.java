@@ -41,6 +41,45 @@ public class UserRepositoryImpl implements UserRepository {
 		UserDTO user = template.queryForObject(SQL, new UserRowMapper(), userNo);
 		return user;
 	}
+	
+	@Override
+	public UserDTO getUserById(String userId) {
+		String SQL = "SELECT * FROM user WHERE user_id = ?";
+		UserDTO user = template.queryForObject(SQL, Integer.class, userId);
+		return user;
+	}
+
+	@Override
+	public int getCompleteCount(int userNo) {
+		String SQL = "SELECT COUNT(*) FROM review WHERE target_user_no = ?";
+		int completeCount = template.queryForObject(SQL, Integer.class, userNo);
+		return completeCount;
+	}
+
+	@Override
+	public int getTotalReviewStarCount(int userNo) {
+		String SQL = "SELECT SUM(review_star) FROM review WHERE target_user_no = ?";
+		int totalReviewStarCount = template.queryForObject(SQL, Integer.class, userNo);
+		return totalReviewStarCount;
+	}
+
+	@Override
+	public void increaseRequesterCompletedCount(int userNo) {
+		String SQL = "UPDATE user SET requester_completed_count = requester_completed_count + 1 WHERE user_no = ?";
+		template.update(SQL, userNo);
+	}
+
+	@Override
+	public void increaseHelperCompletedCount(int userNo) {
+		String SQL = "UPDATE user SET helper_completed_count = helper_completed_count + 1 WHERE user_no = ?";
+		template.update(SQL, userNo);
+	}
+
+	@Override
+	public void setUpdateMannerScore(int userNo, int mannerScore) {
+		String SQL = "UPDATE user SET manner_score = ? WHERE user_no = ?";
+		template.update(SQL, userNo, mannerScore);
+	}
 
 	@Override
 	public void setNewUser(UserDTO newUser) {

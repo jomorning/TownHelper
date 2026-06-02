@@ -1,11 +1,14 @@
 package com.townHelper.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.townHelper.domain.HelpPostSummaryDTO;
 import com.townHelper.domain.InterestHelpPostDTO;
@@ -22,32 +25,39 @@ public class MainController {
 
 	@Autowired
 	HelpPostService helpPostService;
-	
+
 	@Autowired
 	InterestHelpPostService interestHelpPostService;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ReviewService reviewService;
 
 	@GetMapping("/")
-	public String getMain(Model model, HttpSession session) {
+	public String getMain(Model model, HttpSession session,
+			@RequestParam(value = "login", required = false) String isLogin, Principal principal) {
 
-		session.setAttribute("loginUserNo", 2);
+		if ("true".equals(isLogin) && !isLogin.isEmpty()) {
+			String loginUserId = principal.getName();
+			User userById = userService.getUserById(loginUserId);
+			int loginUserNo = userById.getUserNo();
 
-		int loginUserNo = (Integer) session.getAttribute("loginUserNo");
+			System.out.println("현재 로그인 사용자: " + loginUserNo);
+		}
+
+		if (loginUserNo == null) {
+			return "redirect:/login";
+		}
 
 		List<HelpPostSummaryDTO> helpPostList = helpPostService.getAllHelpPostsSummary(loginUserNo);
-
 		List<InterestHelpPostDTO> interestHelpPostList = interestHelpPostService.getAllInterestHelpPosts(loginUserNo);
 
 		model.addAttribute("loginUserNo", loginUserNo);
 		model.addAttribute("helpPostList", helpPostList);
 		model.addAttribute("interestHelpPostList", interestHelpPostList);
-		
-		
+
 		UserDTO loginUser = userService.getUserByNo(loginUserNo);
 		// int helperWorkCount = helpApplyService.getAcceptedHelpCount(loginUserNo);
 		// double averageReviewStar = reviewService.getAverageReviewStar(loginUserNo);

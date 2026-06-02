@@ -16,9 +16,7 @@ public class ReviewRowMapper implements RowMapper<ReviewDTO> {
 		review.setHelpPostNo(rs.getInt("help_post_no"));
 		review.setHelpCategory(rs.getString("help_category"));
 		review.setWriterUserNo(rs.getInt("writer_user_no"));
-		review.setWriterUserId(rs.getString("writer_user_id"));
 		review.setTargetUserNo(rs.getInt("target_user_no"));
-		review.setTargetUserId(rs.getString("target_user_id"));
 		review.setTargetType(rs.getString("target_type"));
 		review.setReviewStar(rs.getInt("review_star"));
 		review.setReviewContent(rs.getString("review_content"));

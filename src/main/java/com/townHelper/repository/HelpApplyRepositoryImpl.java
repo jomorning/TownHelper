@@ -30,7 +30,6 @@ public class HelpApplyRepositoryImpl implements HelpApplyRepository {
 		
 		// 지원 상태 변경 (요청자)
 		String SQL = "UPDATE help_apply SET apply_status = ? WHERE help_apply_no = ?";
-		System.out.println(apply.getApplyStatus() + " : " + apply.getHelpPostNo());
 		template.update(SQL, apply.getApplyStatus(), apply.getHelpApplyNo());
 		
 		// 수락된 지원 개수 반환
@@ -44,7 +43,6 @@ public class HelpApplyRepositoryImpl implements HelpApplyRepository {
 		// 수락된 지원 수가 예상 도우미 인원에 도달 시 게시글 상태 CLOSED 변경
 		String SQL_expectedApplyCount = "SELECT expected_helper_count FROM help_post WHERE help_post_no = ?";
 		int expectedApplyCount = template.queryForObject(SQL_expectedApplyCount, Integer.class, apply.getHelpPostNo());
-		System.out.println(expectedApplyCount);
 		
 		if (currentAcceptedCount == expectedApplyCount) {
 			String SQL_status_update = "UPDATE help_post SET post_status = 'CLOSED' WHERE help_post_no = ?";
@@ -56,6 +54,13 @@ public class HelpApplyRepositoryImpl implements HelpApplyRepository {
 			template.update(SQL_status_update, apply.getHelpPostNo());
 		}
 		
+	}
+
+	@Override
+	public List<HelpApplyDTO> getAppliesByCompletedHelpPost(int helpPostNo) {
+		String SQL = "SELECT help_apply.help_apply_no, help_apply.user_no, help_post.help_post_no, help_apply.apply_status FROM help_apply JOIN help_post ON help_apply.help_post_no = help_post.help_post_no WHERE apply_status = 'ACCEPTED' AND post_status = 'COMPLETE' AND help_apply.help_post_no = ?";
+		List<HelpApplyDTO> applyList = template.query(SQL, new HelpApplyStatusRowMapper(), helpPostNo);
+		return applyList;
 	}
 
 	@Override

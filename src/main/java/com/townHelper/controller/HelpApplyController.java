@@ -49,7 +49,6 @@ public class HelpApplyController {
 		
 		int loginUserNo = (Integer) session.getAttribute("loginUserNo");
 		newApply.setUserNo(loginUserNo);
-		
 		helpApplyService.setNewHelpApply(newApply);
 		List<HelpApplyDTO> helpApplyList = helpApplyService.getAllHelpAppliesByPost(helpPostNo);
 		return helpApplyList;

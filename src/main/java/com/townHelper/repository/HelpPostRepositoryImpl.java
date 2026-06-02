@@ -32,6 +32,12 @@ public class HelpPostRepositoryImpl implements HelpPostRepository {
 		HelpPostDTO helpPost = template.queryForObject(SQL, new HelpPostRowMapper(), helpPostNo);
 		return helpPost;
 	}
+	
+	@Override
+	public void setHelpPostComplete(int helpPostNo) {
+		String SQL = "UPDATE help_post SET post_status = 'COMPLETE' WHERE help_post_no = ?";
+		template.update(SQL, helpPostNo);
+	}
 
 	@Override
 	public Integer setNewHelpPost(HelpPostDTO newHelpPost) {

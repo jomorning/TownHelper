@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.townHelper.domain.UserDTO;
 import com.townHelper.domain.UserProfileSummaryDTO;
+import com.townHelper.repository.ReviewRepository;
 import com.townHelper.repository.UserRepository;
 
 @Service
@@ -18,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
 
 	@Override
 	public List<UserProfileSummaryDTO> getAllUsersSummary() {
@@ -36,6 +40,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO getUserByNo(int userNo) {
 		UserDTO user = userRepository.getUserByNo(userNo);
+		return user;
+	}
+	
+	@Override
+	public UserDTO getUserById(String userId) {
+		UserDTO user = userRepository.getUserById(userId);
 		return user;
 	}
 
@@ -66,27 +76,28 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void setEditUser(UserDTO editUser) {
-		
+
 		UserDTO originUser = userRepository.getUserByNo(editUser.getUserNo());
-		
-		if (editUser.getUserPw() == null && editUser.getUserPw().isEmpty()); {
-			editUser.setUserPw(originUser.getUserPw());			
+
+		if (editUser.getUserPw() == null && editUser.getUserPw().isEmpty())
+			;
+		{
+			editUser.setUserPw(originUser.getUserPw());
 		}
-			
+
 		if (editUser.getProfileImgFile() != null && !editUser.getProfileImgFile().isEmpty()) {
-			uploadFile(editUser);			
+			uploadFile(editUser);
 		} else {
 			editUser.setProfileImgName(originUser.getProfileImgName());
 			editUser.setProfileImgPath(originUser.getProfileImgPath());
 		}
-		
+
 		userRepository.setEditUser(editUser);
 	}
 
 	@Override
 	public void setDeleteUser(int userNo) {
 		userRepository.setDeleteUser(userNo);
-		System.out.println(userNo + "번 사용자 DB 삭제됨.");
 	}
 
 }

@@ -52,6 +52,10 @@
 					href="${main}interestHelpPosts">관심글</a> <a
 					href="${main}users/${loginUserNo}">마이페이지</a> <a href="${main}login">로그인</a>
 				<a href="${main}users/register" class="join-btn">회원가입</a>
+				
+				<form action="${main}logout" method="POST">
+					<button>로그아웃</button>
+				</form>
 			</nav>
 
 		</div>

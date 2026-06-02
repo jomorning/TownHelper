@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
 <html>
@@ -110,29 +111,35 @@
 						var="editHelpPost" />
 
 					<div class="form-actions">
-						<a href="${editHelpPost}" class="btn-basic">게시글 수정</a>
+						<c:if test="${helpPost.userNo == loginUserNo}">
+							<a href="${editHelpPost}" class="btn-basic">게시글 수정</a>
+						</c:if>
 					</div>
 
-					<div class="apply-box" style="margin-top: 24px;">
+					<c:if test="${helpPost.postStatus == 'OPEN'}">
 
-						<h3>도우미 지원</h3>
+						<div class="apply-box" style="margin-top: 24px;">
 
-						<div class="form-row">
-							<label>제안 보수</label> <input type="number" id="suggestedPay"
-								placeholder="제안 보수를 입력하세요">
+							<h3>도우미 지원</h3>
+
+							<div class="form-row">
+								<label>제안 보수</label> <input type="number" id="suggestedPay"
+									placeholder="제안 보수를 입력하세요">
+							</div>
+
+							<div class="form-row">
+								<label>어필 내용</label> <input type="text" id="appealContent"
+									placeholder="어필 내용을 입력하세요">
+							</div>
+
+							<div class="form-actions">
+								<button type="button" id="newHelpApplyBtn" class="btn-dark">
+									도우미 지원</button>
+							</div>
+
 						</div>
 
-						<div class="form-row">
-							<label>어필 내용</label> <input type="text" id="appealContent"
-								placeholder="어필 내용을 입력하세요">
-						</div>
-
-						<div class="form-actions">
-							<button type="button" id="newHelpApplyBtn" class="btn-dark">
-								도우미 지원</button>
-						</div>
-
-					</div>
+					</c:if>
 
 				</section>
 
@@ -162,7 +169,17 @@
 
 					</section>
 
-					<c:if test="${helpPost.postStatus == 'COMPLETE'}">
+					<c:if
+						test="${helpPost.postStatus == 'CLOSED' && helpPost.userNo == loginUserNo}">
+
+						<c:url value="/help-posts/${helpPost.helpPostNo}/complete"
+							var="helpPostComplete" />
+						<form:form action="${helpPostComplete}" method="PUT">
+							<button class="btn-dark">도움 완료 처리</button>
+						</form:form>
+					</c:if>
+
+					<c:if test="${completedHelper}">
 
 						<div class="apply-box" style="margin-top: 24px;">
 							<h3>요청자 리뷰</h3>
@@ -173,11 +190,15 @@
 							<a
 								href="${pageContext.request.contextPath}/reviews/${helpPost.userNo}/new?targetType=REQUESTER&helpPostNo=${helpPost.helpPostNo}"
 								class="btn-dark"> 요청자 리뷰 작성 </a>
+
 						</div>
 
 					</c:if>
 
 				</aside>
+
+				현재 세션 로그인 사용자는:<br> 게시글 작성자: ${completedRequester}<br> 수락된
+				도움 요청자: ${completedHelper}
 
 			</div>
 
@@ -203,13 +224,12 @@
 									${comment.commentUpdatedAt} </span>
 							</p>
 
-							<div class="form-actions">
-								<button type="button" id="editCommentBtn" class="btn-basic">
-									수정</button>
-
-								<button type="button" id="deleteCommentBtn" class="btn-red">
-									삭제</button>
-							</div>
+							<c:if test="${comment.userNo == loginUserNo}">
+								<div class="form-actions">
+									<button type="button" id="editCommentBtn" class="btn-basic">수정</button>
+									<button type="button" id="deleteCommentBtn" class="btn-red">삭제</button>
+								</div>
+							</c:if>
 
 							<div class="editFormArea"></div>
 
@@ -356,6 +376,7 @@
 
 	const helpApplyBaseUrl = "${pageContext.request.contextPath}/help-posts/${helpPost.helpPostNo}/help-applies";
 
+
 	function renderHelpApplyList(helpApplyList) {
 	    helpApplyArea.innerHTML = "";
 	    let appliedCount = 0;
@@ -364,6 +385,8 @@
 	    let maxSuggestedPay = null;
 	    
 	    const postStatus = "${helpPost.postStatus}";
+	    const loginUserNo = ${loginUserNo};
+	    const isPostWriter = ${helpPost.userNo == loginUserNo};
 
 	    helpApplyList.forEach(function(apply) {
 	    	appliedCount++;
@@ -393,6 +416,22 @@
 	    	        + "' class='btn-dark'>리뷰 작성</a>";
 	    	}
 	    	 
+	    	 const isPostWriter = ${helpPost.userNo == loginUserNo};
+	    	 
+	    	 let actionButtons = "";
+
+	    	 if (isPostWriter && postStatus === "OPEN") {
+	    	     actionButtons +=
+	    	         "<button type='button' class='acceptApplyBtn btn-blue'>수락</button>"
+	    	         + "<button type='button' class='rejectApplyBtn btn-red'>거절</button>";
+	    	 }
+
+	    	 if (apply.userNo === loginUserNo && postStatus === "OPEN") {
+	    	     actionButtons +=
+	    	         "<button type='button' class='editApplyBtn btn-basic'>수정</button>"
+	    	         + "<button type='button' class='deleteApplyBtn btn-red'>삭제</button>";
+	    	 }
+	    	 
 	         helpApplyArea.innerHTML +=
 	            "<div class='comment-card' data-help-apply-no='" + apply.helpApplyNo + "'>"
 	            + "<strong>신청자 ID: " + apply.userId + "</strong>"
@@ -400,11 +439,10 @@
 	            + "<p class='appealContent'>" + apply.appealContent + "</p>"
 	            + "<p>상태: <span class='applyStatus'>" + apply.applyStatus + "</span></p>"
 	            + "<p>신청일: " + apply.applyCreatedAt + "</p>"
+	            + "<a href='${pageContext.request.contextPath}/users/" + apply.userNo
+	            + "' class='btn-basic'>프로필</a>"
 	            + "<div class='form-actions'>"
-	            + "<button type='button' class='acceptApplyBtn btn-blue'>수락</button>"
-	            + "<button type='button' class='rejectApplyBtn btn-red'>거절</button>"
-	            + "<button type='button' class='editApplyBtn btn-basic'>수정</button>"
-	            + "<button type='button' class='deleteApplyBtn btn-red'>삭제</button>"
+	            + actionButtons
 	            + reviewButton
 	            + "</div>"
 	            + "<div class='editApplyFormArea'></div>"
@@ -472,7 +510,6 @@
 	                renderHelpApplyList(helpApplyList);
 	            }
 	        });
-
 	        return;
 	    }
 
@@ -493,6 +530,7 @@
 
 	        return;
 	    }
+	    
 	    if (event.target.classList.contains("editApplyBtn")) {
 	        const editApplyFormArea = applyDiv.querySelector(".editApplyFormArea");
 	        const currentAppealContent = applyDiv.querySelector(".appealContent").innerText;

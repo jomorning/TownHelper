@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.townHelper.domain.ReviewDTO;
 import com.townHelper.domain.ReviewSummaryDTO;
+import com.townHelper.domain.UserDTO;
 import com.townHelper.service.ReviewService;
+import com.townHelper.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -22,6 +24,9 @@ public class ReviewController {
 	
 	@Autowired
 	ReviewService reviewService;
+	
+	@Autowired
+	UserService userService;
 	
 	@GetMapping("/reviews/{targetUserNo}/summary")
 	public String getReviewsSummary(@PathVariable("targetUserNo") int targetUserNo, Model model) {
@@ -33,6 +38,13 @@ public class ReviewController {
 	@GetMapping("/reviews/{reviewNo}/detail")
 	public String getReviewByNo(@PathVariable("reviewNo") int reviewNo, Model model) {
 		ReviewDTO review = reviewService.getReviewByNo(reviewNo);
+		
+		UserDTO writerUser = userService.getUserByNo(review.getWriterUserNo());
+		UserDTO targetUser = userService.getUserByNo(review.getTargetUserNo());
+		
+		review.setWriterUserId(writerUser.getUserId());
+		review.setTargetUserId(targetUser.getUserId());
+		
 		model.addAttribute("review", review);
 		return "review";
 	}
@@ -49,8 +61,8 @@ public class ReviewController {
 	public String submitReview(@PathVariable("targetUserNo") int targetUserNo, @ModelAttribute("newReview") ReviewDTO newReview, HttpSession session) {
 		
 		Integer loginUserNo = (Integer) session.getAttribute("loginUserNo");
-		newReview.setWriterUserNo(loginUserNo);
 		
+		newReview.setWriterUserNo(loginUserNo);
 		newReview.setTargetUserNo(targetUserNo);
 		int returnedPK = reviewService.setNewReview(newReview);
 		return "redirect:/reviews/" + returnedPK + "/detail";

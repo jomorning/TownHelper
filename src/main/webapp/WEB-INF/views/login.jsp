@@ -43,7 +43,7 @@
             </div>
 
             <form action="${pageContext.request.contextPath}/login"
-                  method="post">
+                  method="POST">
 
                 <div class="form-row">
                     <label>아이디</label>

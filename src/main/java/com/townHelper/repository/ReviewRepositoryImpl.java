@@ -28,7 +28,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
 	@Override
 	public ReviewDTO getReviewByNo(int reviewNo) {
-		String SQL = "SELECT r.review_no, r.help_post_no, hp.help_category, writer.user_id AS writer_user_id, target.user_id AS target_user_id, r.target_type, r.review_star, r.review_content, r.review_created_at FROM review r JOIN user writer ON r.writer_user_no = writer.user_no JOIN user target ON r.target_user_no = target.user_no JOIN help_post hp ON r.help_post_no = hp.help_post_no WHERE r.review_no = ?";
+		String SQL = "SELECT review.review_no, review.help_post_no, help_post.help_category, review.writer_user_no, review.target_user_no, review.target_type, review.review_star, review.review_content, review.review_created_at FROM review JOIN user ON review.writer_user_no = user.user_no JOIN help_post ON review.help_post_no = help_post.help_post_no WHERE review.review_no = ?";
 		ReviewDTO review = template.queryForObject(SQL, new ReviewRowMapper(), reviewNo);
 		return review;
 	}

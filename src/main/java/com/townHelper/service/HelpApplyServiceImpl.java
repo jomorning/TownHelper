@@ -44,6 +44,12 @@ public class HelpApplyServiceImpl implements HelpApplyService {
 	}
 
 	@Override
+	public List<HelpApplyDTO> getAppliesByCompletedHelpPost(int helpPostNo) {
+		List<HelpApplyDTO> applyList = helpApplyRepository.getAppliesByCompletedHelpPost(helpPostNo);
+		return applyList;
+	}
+
+	@Override
 	public void setNewHelpApply(HelpApplyDTO newApply) {
 		HelpPostDTO helpPost = helpPostRepository.getHelpPostByNo(newApply.getHelpPostNo());
 

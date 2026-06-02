@@ -16,6 +16,18 @@ public interface UserRepository {
 	// 마이페이지 사용자 정보 조회
 	UserDTO getUserByNo(int userNo);
 	
+	UserDTO getUserById(String userId);
+	
+	int getCompleteCount(int userNo);
+	
+	int getTotalReviewStarCount(int userNo);
+	
+	void increaseRequesterCompletedCount(int userNo);
+	
+	void increaseHelperCompletedCount(int userNo);
+	
+	void setUpdateMannerScore(int userNo, int mannerScore);
+	
 	void setNewUser(UserDTO newUser);
 	
 	void setEditUser(UserDTO editUser);

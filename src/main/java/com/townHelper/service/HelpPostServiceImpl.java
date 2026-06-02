@@ -13,10 +13,10 @@ import com.townHelper.repository.UserRepository;
 
 @Service
 public class HelpPostServiceImpl implements HelpPostService {
-	
+
 	@Autowired
 	HelpPostRepository helpPostRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -30,8 +30,19 @@ public class HelpPostServiceImpl implements HelpPostService {
 	public HelpPostDTO getHelpPostByNo(int helpPostNo) {
 		HelpPostDTO helpPost = helpPostRepository.getHelpPostByNo(helpPostNo);
 		UserDTO user = userRepository.getUserByNo(helpPost.getUserNo());
-		helpPost.setUserId(user.getUserId());	
+		helpPost.setUserId(user.getUserId());
 		return helpPost;
+	}
+
+	@Override
+	public void setHelpPostComplete(int helpPostNo) {
+		HelpPostDTO helpPost = helpPostRepository.getHelpPostByNo(helpPostNo);
+
+		if ("CLOSED".equals(helpPost.getPostStatus())) {
+			helpPostRepository.setHelpPostComplete(helpPostNo);
+			userRepository.increaseRequesterCompletedCount(helpPost.getUserNo());			
+		}
+
 	}
 
 	@Override
@@ -42,12 +53,12 @@ public class HelpPostServiceImpl implements HelpPostService {
 
 	@Override
 	public void setEditHelpPost(HelpPostDTO editHelpPost) {
-		
+
 		HelpPostDTO originHelpPost = helpPostRepository.getHelpPostByNo(editHelpPost.getHelpPostNo());
 		if (editHelpPost.getRequestTime() == null) {
 			editHelpPost.setRequestTime(originHelpPost.getRequestTime());
 		}
-		
+
 		helpPostRepository.setEditHelpPost(editHelpPost);
 	}
 

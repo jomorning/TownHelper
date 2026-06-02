@@ -16,6 +16,8 @@ public interface UserService {
 	// 마이페이지 사용자 정보 조회
 	UserDTO getUserByNo(int userNo);
 	
+	UserDTO getUserById(String userId);
+	
 	void uploadFile(UserDTO user);
 
 	void setNewUser(UserDTO newUser);
